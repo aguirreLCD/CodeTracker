@@ -122,6 +122,8 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - System Configuration;
 - namespace;
 - internal classes;
+- TimeSpan;
+- Stopwatch;
 
 <!--
   - git add .

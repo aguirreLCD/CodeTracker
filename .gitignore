@@ -535,3 +535,7 @@ DS_Store
 .vscode/launch.json 
 .vscode/extensions.json
 
+
+/crud
+crud
+*crud

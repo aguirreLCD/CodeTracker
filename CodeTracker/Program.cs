@@ -14,12 +14,17 @@ namespace code_tracker
             while (menuSelection != "0")
             {
                 Console.Clear();
+
+                var currentDate = DateTime.Now;
+                Console.WriteLine($"{Environment.NewLine}Hello! on {currentDate.Day:d}/{currentDate.Month:d}/{currentDate.Year:d} at {currentDate:t}");
+                Console.WriteLine("------------------------\n");
+
                 Console.WriteLine("Welcome to the Code Tracker App in C#");
                 Console.WriteLine("------------------------\n");
 
-                // Ask the user to choose an option.
                 Console.WriteLine("Your main menu options are:");
                 Console.WriteLine("------------------------\n");
+
                 Console.WriteLine("1. To display all current table in database, type: 1");
                 Console.WriteLine("2. To create new session, type: 2");
                 // Console.WriteLine("3. To search specific code session, type: 3");
@@ -28,9 +33,8 @@ namespace code_tracker
                 // Console.WriteLine("6. To delete a code session, type: 6");
                 // Console.WriteLine("7. To delete all code sessions, type: 7");
 
-                var currentDate = DateTime.Now;
-                Console.WriteLine($"{Environment.NewLine}Hello! on {currentDate:d} at {currentDate:t}");
 
+                Console.WriteLine();
                 Console.WriteLine("Enter your option (or type 0 to Exit the program)");
                 Console.WriteLine();
 
@@ -52,7 +56,6 @@ namespace code_tracker
                             stopwatch.Stop();
                             string sessionDuration = String.Format($"{stopwatch.Elapsed.TotalSeconds}");
                             // Console.WriteLine($"Elapsed time: {stopwatch.Elapsed.TotalSeconds} seconds ");
-                            // Console.WriteLine($"Elapsed time: {sessionDuration} seconds  ");
 
                             Console.WriteLine("Exiting program...");
                             return;
@@ -66,8 +69,7 @@ namespace code_tracker
                         menuSelection = readInputResult.ToLower();
                     }
                 }
-
-                // create DB, Table, open connection
+                // create DB, Table, Open connection
                 string? connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
                 using (var connection = new SqliteConnection(connectionString))
