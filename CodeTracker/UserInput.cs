@@ -24,21 +24,29 @@ namespace code_tracker
             var choices = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<string>()
                     .PageSize(10)
-                    .Title("[green]Welcome to the Code Tracker App in C#.[/]")
+                    .Title("[green]Code Tracker App[/]")
                     .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                     .InstructionsText("[grey](Press [blue]<space>[/] to toggle a choice, [green]<enter>[/] to accept)[/]")
                     .AddChoiceGroup("Your main menu options are", new[]
                     {
                         "1. To display all current table in database, type 1",
                         "2. To create new session, type 2",
+                        "3. To create new session, type 2",
+                        "4. To create new session, type 2",
+                        "5. To create new session, type 2",
+                        "6. To create new session, type 2",
                         "0. To exit the program, type 0",
-                    }));
-            // .AddChoices(new[]
-            // {
-            //     "1. To display all current table in database, type 1",
-            //     "2. To create new session, type 2",
-            //     "0. To exit the program, type 0",
-            // }));
+                    })
+            .AddChoices(new[]
+            {
+                "1. To display all current table in database, type 1",
+                "2. To create new session, type 2",
+                "3. To create new session, type 2",
+                "4. To create new session, type 2",
+                "5. To create new session, type 2",
+                "6. To create new session, type 2",
+                "0. To exit the program, type 0",
+            }));
 
             var choice = choices.Count == 1 ? choices[0] : null;
 
@@ -53,7 +61,14 @@ namespace code_tracker
             }
 
             AnsiConsole.MarkupLine("You selected: [yellow]{0}[/]", choice);
-            return choice;
+
+            string extracted = choice.Substring(0, 1);
+
+            // Console.WriteLine(extracted);
+            // Console.WriteLine(choice[0]);
+            // Console.WriteLine(choices[0]);
+
+            return extracted;
         }
     }
 }

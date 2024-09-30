@@ -9,42 +9,28 @@ namespace code_tracker
     {
         static void Main(string[] args)
         {
-            Console.Clear();
-
-            string? menuSelection = "";
 
             var name = UserInput.AskName();
+
+            string? menuSelection = "";
 
             while (menuSelection != "0")
             {
                 var choice = UserInput.AskUserInput();
-                
+
                 if (!String.IsNullOrEmpty(choice))
                 {
                     menuSelection = choice.ToLower();
                 }
 
-                var acceptableMenuOption = "1 2 3 4 5 6 7 8 0".Split();
-
-                while (!acceptableMenuOption.Contains(menuSelection))
+                // application should only be terminated when the user inserts 0.
+                if (menuSelection == "0")
                 {
-                    // application should only be terminated when the user inserts 0.
-                    if (menuSelection.StartsWith("0"))
-                    {
-                        Console.WriteLine("Exiting program...");
-                        return;
-                    }
-
-                    if (menuSelection.StartsWith("1"))
-                    {
-                        menuSelection = "1";
-                    }
-
-                    if (menuSelection.StartsWith("2"))
-                    {
-                        menuSelection = "2";
-                    }
+                    Console.WriteLine("Exiting program...");
+                    return;
                 }
+
+                Console.Clear();
 
                 // create DB, Table, Open connection
                 string? connectionString = ConfigurationManager.AppSettings["ConnectionString"];
@@ -68,11 +54,13 @@ namespace code_tracker
                         case "1": // display sessions
                             SessionController showTable = new();
                             showTable.DisplayTable(connection);
+
                             break;
 
                         case "2"://  create session
                             SessionController createNewSession = new();
                             createNewSession.CreateRecord(connection);
+
                             break;
 
                         case "3": // search and display info by session

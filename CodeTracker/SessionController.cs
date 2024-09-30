@@ -21,8 +21,7 @@ namespace code_tracker
                 using (var reader = displayTableCommand.ExecuteReader())
                 {
 
-                    Console.WriteLine("\nCurrent Coding Sessions:\n");
-
+                    Console.WriteLine("\nCurrent Coding Sessions:");
                     // Create a table
                     var table = new Table();
                     table.AddColumn("[red]ID[/]");
@@ -31,7 +30,6 @@ namespace code_tracker
                     table.AddColumn("[red]End[/]");
                     table.AddColumn("[red]Duration[/]");
 
-                    Console.WriteLine();
 
                     while (reader.Read())
                     {
@@ -80,6 +78,8 @@ namespace code_tracker
 
                 Console.WriteLine();
                 Console.WriteLine($"Session: {formattedDay}\t{startHour}\t {formattedEndHour}\t {difference}\t  inserted.");
+                Console.WriteLine();
+
             }
         }
     }
