@@ -93,7 +93,7 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - [] Validation for user input;
 - [] Handle errors:
 
-- [] Use Spectre.Console:
+- [] Use Spectre.Console:  
   `dotnet add package Spectre.Console`
 
   `dotnet add package Spectre.Console.Cli`

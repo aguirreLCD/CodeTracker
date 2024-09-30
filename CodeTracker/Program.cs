@@ -12,44 +12,26 @@ namespace code_tracker
             string? readInputResult = "";
             string? menuSelection = "";
 
+            var name = UserInput.AskName();
+            var choice = UserInput.AskUserInput();
 
+            Console.WriteLine($"{choice}");
+
+            Console.WriteLine($"{choice.StartsWith("1")}");
+            Console.WriteLine($"{choice.StartsWith("2")}");
+            Console.WriteLine($"{choice.StartsWith("0")}");
 
             while (menuSelection != "0")
             {
 
-                Console.Clear();
+                // Console.Clear();
 
-                // Ask the user a couple of simple questions
-                var name = AnsiConsole.Ask<string>("What's your name?");
-                // var age = AnsiConsole.Ask<int>("What's your age?");
+                // Console.WriteLine($"{choice.StartsWith("1")}");
+                // Console.WriteLine($"{choice.StartsWith("2")}");
+                // Console.WriteLine($"{choice.StartsWith("0")}");
 
-                // Echo the name and age back to the terminal
-                // AnsiConsole.WriteLine($"So you're {name} and you're {age} years old");
-
-                var currentDate = DateTime.Now;
-
-                Console.WriteLine($"{Environment.NewLine}Hello {name}! Today is {currentDate.Day:d}/{currentDate.Month:d}/{currentDate.Year:d} at {currentDate:t}");
-                // Console.WriteLine("------------------------\n");
-        
-
-                var choice = AnsiConsole.Prompt(
-                    new SelectionPrompt<string>()
-                        .Title("[green]Welcome to the Code Tracker App in C#[/]")
-                        .PageSize(10)
-                        .AddChoices(new[] {
-                            "Your main menu options are:",
-                            "1. To display all current table in database, type 1",
-                            "2. To create new session, type 2",
-                            "0. To exit the program, type 0",
-                        }));
-                // Echo the choice back to the terminal
-                Console.WriteLine($"{choice}");
-
-                Console.WriteLine($"{choice.StartsWith("1")}");
-                Console.WriteLine($"{choice.StartsWith("2")}");
-                Console.WriteLine($"{choice.StartsWith("0")}");
-
-
+                // AnsiConsole.MarkupLineInterpolated($"Hello, [blue]{choice}[/]");
+                // AnsiConsole.MarkupLine($"Hello, [blue]{choice}[/]");
 
                 // Console.WriteLine("Welcome to the Code Tracker App in C#");
                 // Console.WriteLine("------------------------\n");
@@ -101,6 +83,8 @@ namespace code_tracker
                         menuSelection = readInputResult.ToLower();
                     }
                 }
+
+                
                 // create DB, Table, Open connection
                 string? connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
