@@ -11,9 +11,10 @@ namespace code_tracker
         {
             // var name = UserInput.AskName();
 
-            var option = UserInput.AskRange();
+            // var option = UserInput.AskRange();
 
-            var userName = UserInput.AskUserName();
+            // var userName = UserInput.AskUserName();
+
 
             string? menuSelection = "";
 
@@ -67,7 +68,9 @@ namespace code_tracker
                             break;
 
                         case "3": // search and display info by session
-                            Console.WriteLine("\n\rPress the Enter key to continue.");
+                            SessionController calculateSession = new();
+                            calculateSession.CalculateSessionTime(connection);
+
                             break;
 
                         case "4": // search and display session by duration

@@ -131,16 +131,30 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - Stopwatch;
 
 <!--
-  - git add .
-  - git commit -m " "
-  - git push -u origin main -->
+
+git add .
+
+git commit -m " "
+
+git push -u origin main
+
+git log --pretty=format:"%ad - %an: %s" > git_log.txt
+
+git log --pretty=format:'%h was %an, %ar, message: %s' > log.log
+
+  -->
 
 <!--
+
 sqlite3
-sqlite> .open codesessions.db
-sqlite> .mode column
-sqlite> .headers on
-sqlite> .tables
+
+.open codesessions.db
+
+.mode column
+
+.headers on
+
+.tables
 sqlite> SELECT * FROM sessions;
 INSERT INTO sessions (date, duration) VALUES ('today', 'now');
 sqlite>.exit
