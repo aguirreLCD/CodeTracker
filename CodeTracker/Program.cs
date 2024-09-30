@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Configuration;
 using System.Diagnostics;
+using Spectre.Console;
 
 namespace code_tracker
 {
@@ -11,34 +12,66 @@ namespace code_tracker
             string? readInputResult = "";
             string? menuSelection = "";
 
+
+
             while (menuSelection != "0")
             {
+
                 Console.Clear();
 
+                // Ask the user a couple of simple questions
+                var name = AnsiConsole.Ask<string>("What's your name?");
+                // var age = AnsiConsole.Ask<int>("What's your age?");
+
+                // Echo the name and age back to the terminal
+                // AnsiConsole.WriteLine($"So you're {name} and you're {age} years old");
+
                 var currentDate = DateTime.Now;
-                Console.WriteLine($"{Environment.NewLine}Hello! on {currentDate.Day:d}/{currentDate.Month:d}/{currentDate.Year:d} at {currentDate:t}");
-                Console.WriteLine("------------------------\n");
 
-                Console.WriteLine("Welcome to the Code Tracker App in C#");
-                Console.WriteLine("------------------------\n");
+                Console.WriteLine($"{Environment.NewLine}Hello {name}! Today is {currentDate.Day:d}/{currentDate.Month:d}/{currentDate.Year:d} at {currentDate:t}");
+                // Console.WriteLine("------------------------\n");
+        
 
-                Console.WriteLine("Your main menu options are:");
-                Console.WriteLine("------------------------\n");
+                var choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("[green]Welcome to the Code Tracker App in C#[/]")
+                        .PageSize(10)
+                        .AddChoices(new[] {
+                            "Your main menu options are:",
+                            "1. To display all current table in database, type 1",
+                            "2. To create new session, type 2",
+                            "0. To exit the program, type 0",
+                        }));
+                // Echo the choice back to the terminal
+                Console.WriteLine($"{choice}");
 
-                Console.WriteLine("1. To display all current table in database, type: 1");
-                Console.WriteLine("2. To create new session, type: 2");
+                Console.WriteLine($"{choice.StartsWith("1")}");
+                Console.WriteLine($"{choice.StartsWith("2")}");
+                Console.WriteLine($"{choice.StartsWith("0")}");
+
+
+
+                // Console.WriteLine("Welcome to the Code Tracker App in C#");
+                // Console.WriteLine("------------------------\n");
+
+                // Console.WriteLine("Your main menu options are:");
+                // Console.WriteLine("------------------------\n");
+
+                // Console.WriteLine("1. To display all current table in database, type: 1");
+                // Console.WriteLine("2. To create new session, type: 2");
                 // Console.WriteLine("3. To search specific code session, type: 3");
                 // Console.WriteLine("4. To search code sessions by date, type: 4");
                 // Console.WriteLine("5. To update a code session, type: 5");
                 // Console.WriteLine("6. To delete a code session, type: 6");
                 // Console.WriteLine("7. To delete all code sessions, type: 7");
 
+                // Console.WriteLine();
+                // Console.WriteLine("Enter your option (or type 0 to Exit the program)");
+                // Console.WriteLine();
 
-                Console.WriteLine();
-                Console.WriteLine("Enter your option (or type 0 to Exit the program)");
-                Console.WriteLine();
 
                 readInputResult = Console.ReadLine();
+                // readInputResult = choice;
 
                 var acceptableMenuOption = "1 2 3 4 5 6 7 8".Split();
 
@@ -55,7 +88,6 @@ namespace code_tracker
                         {
                             stopwatch.Stop();
                             string sessionDuration = String.Format($"{stopwatch.Elapsed.TotalSeconds}");
-                            // Console.WriteLine($"Elapsed time: {stopwatch.Elapsed.TotalSeconds} seconds ");
 
                             Console.WriteLine("Exiting program...");
                             return;
