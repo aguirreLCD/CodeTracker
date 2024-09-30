@@ -71,13 +71,13 @@ namespace code_tracker
 
                 insertCommand.CommandText =
                 insertCommand.CommandText =
-                $"INSERT INTO sessions(date, startTime, endTime, duration) VALUES('{formattedDay}', '{startHour}', '{formattedEndHour}', '{difference}' )";
+                $"INSERT INTO sessions(date, startTime, endTime) VALUES('{formattedDay}', '{startHour}', '{formattedEndHour}' )";
 
                 insertCommand.ExecuteNonQuery();
                 insertTransaction.Commit();
 
                 Console.WriteLine();
-                Console.WriteLine($"Session: {formattedDay}\t{startHour}\t {formattedEndHour}\t {difference}\t  inserted.");
+                Console.WriteLine($"Session: {formattedDay}\t{startHour}\t {formattedEndHour}\t inserted.");
                 Console.WriteLine();
 
             }
@@ -182,8 +182,6 @@ namespace code_tracker
             try
             {
                 calculateCommand.CommandText =
-
-
                 @"
                    SELECT 
                     date,
@@ -233,9 +231,8 @@ namespace code_tracker
                         Console.WriteLine(difference.TotalHours);
                         Console.WriteLine(difference.TotalMinutes);
 
-
                         // table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
-                        table.AddRow($"{reader["date"]}", $"{reader["MinStartTime"]}", $"{reader["MaxStartTime"]}", $"{reader["duration"]}");
+                        table.AddRow($"{reader["date"]}", $"{reader["MinStartTime"]}", $"{reader["MaxStartTime"]}", $"{difference}");
                     }
 
                     // table.Expand();
