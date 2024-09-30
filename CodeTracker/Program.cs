@@ -76,7 +76,9 @@ namespace code_tracker
                             break;
 
                         case "6": // delete session
-                            Console.WriteLine("\n\rPress the Enter key to continue.");
+                            SessionController deleteSession = new();
+                            deleteSession.DeleteRecord(connection);
+
                             break;
 
                         case "7": // delete all database 

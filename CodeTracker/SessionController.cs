@@ -82,6 +82,41 @@ namespace code_tracker
 
             }
         }
+
+
+        internal void DeleteRecord(SqliteConnection connection)
+        {
+            try
+            {
+                var id = AnsiConsole.Prompt(new TextPrompt<int>("What session you want to delete? type id:"));
+
+                using (var deleteTransaction = connection.BeginTransaction())
+                {
+                    var deleteCommand = connection.CreateCommand();
+
+                    deleteCommand.CommandText =
+                    @"
+                        DELETE FROM sessions
+                        WHERE id = $id;
+                    ";
+
+                    deleteCommand.Parameters.AddWithValue("$id", id);
+                    deleteCommand.ExecuteNonQuery();
+                    deleteTransaction.Commit();
+
+                    Console.WriteLine();
+                    AnsiConsole.MarkupLine("Deleted: [yellow]{0}[/]", id);
+
+                }
+            }
+            catch (SqliteException message)
+            {
+                Console.WriteLine(message.Message);
+                Console.WriteLine(message.ErrorCode);
+                throw;
+            }
+
+        }
     }
 
 }

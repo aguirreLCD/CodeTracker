@@ -31,20 +31,20 @@ namespace code_tracker
                     {
                         "1. To display all current table in database, type 1",
                         "2. To create new session, type 2",
+                        "6. To delete one session by ID, type 6",
                         "3. To create new session, type 2",
                         "4. To create new session, type 2",
                         "5. To create new session, type 2",
-                        "6. To create new session, type 2",
                         "0. To exit the program, type 0",
                     })
             .AddChoices(new[]
             {
                 "1. To display all current table in database, type 1",
                 "2. To create new session, type 2",
+                "6. To delete one session by Id, type 6",
                 "3. To create new session, type 2",
                 "4. To create new session, type 2",
                 "5. To create new session, type 2",
-                "6. To create new session, type 2",
                 "0. To exit the program, type 0",
             }));
 
@@ -70,6 +70,9 @@ namespace code_tracker
 
             return extracted;
         }
+
+
+
     }
 }
 
