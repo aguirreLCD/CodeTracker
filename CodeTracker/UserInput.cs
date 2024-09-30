@@ -5,7 +5,6 @@ namespace code_tracker
 {
     internal class UserInput
     {
-
         public static string AskName()
         {
             Console.Clear();
@@ -19,7 +18,6 @@ namespace code_tracker
 
             return name;
         }
-
 
         public static string AskUserInput()
         {
@@ -43,6 +41,7 @@ namespace code_tracker
             // }));
 
             var choice = choices.Count == 1 ? choices[0] : null;
+
             if (string.IsNullOrWhiteSpace(choice))
             {
                 choice = AnsiConsole.Prompt(

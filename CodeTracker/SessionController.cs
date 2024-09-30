@@ -25,11 +25,11 @@ namespace code_tracker
 
                     // Create a table
                     var table = new Table();
-                    table.AddColumn("ID");
-                    table.AddColumn("Date");
-                    table.AddColumn("Start");
-                    table.AddColumn("End");
-                    table.AddColumn("Duration");
+                    table.AddColumn("[red]ID[/]");
+                    table.AddColumn("[red]Date[/]");
+                    table.AddColumn("[red]Start[/]");
+                    table.AddColumn("[red]End[/]");
+                    table.AddColumn("[red]Duration[/]");
 
                     Console.WriteLine();
 
@@ -38,6 +38,7 @@ namespace code_tracker
                         table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                     }
 
+                    table.Expand();
                     AnsiConsole.Write(table);
                 }
             }
@@ -54,24 +55,18 @@ namespace code_tracker
             var currentDate = DateTime.Now;
 
             string formattedDay = currentDate.ToString("dd-MM-yyyy");
-            // Console.WriteLine(formattedDay);
 
             string startHour = currentDate.ToString("HH:mm");
-            // Console.WriteLine(startHour);
 
             var endHour = currentDate.AddHours(2);
 
             string formattedEndHour = endHour.ToString("HH:mm");
-            // Console.WriteLine(formattedEndHour);
 
             TimeSpan difference = endHour - currentDate;
-            // Console.WriteLine($"Difference: {difference}");
 
             string formattedDurationHours = difference.TotalHours.ToString();
-            // Console.WriteLine($"Difference: {formattedDurationHours} hours");
 
             string formattedDurationMinutes = difference.TotalMinutes.ToString();
-            // Console.WriteLine($"Difference: {formattedDurationMinutes} minutes");
 
             using (var insertTransaction = connection.BeginTransaction())
             {

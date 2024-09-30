@@ -9,46 +9,40 @@ namespace code_tracker
     {
         static void Main(string[] args)
         {
-            string? readInputResult = "";
+            Console.Clear();
+
             string? menuSelection = "";
 
             var name = UserInput.AskName();
-            var choice = UserInput.AskUserInput();
-
-            Console.WriteLine($"{choice}");
-
 
             while (menuSelection != "0")
             {
-
-                readInputResult = Console.ReadLine();
-
-                var acceptableMenuOption = "1 2 3 4 5 6 7 8".Split();
-
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                if (readInputResult != null)
+                var choice = UserInput.AskUserInput();
+                
+                if (!String.IsNullOrEmpty(choice))
                 {
-                    // validate for menu options
-                    while (!acceptableMenuOption.Contains(readInputResult))
-                    {
-                        // application should only be terminated when the user inserts 0.
-                        if (readInputResult == "0")
-                        {
-                            stopwatch.Stop();
-                            string sessionDuration = String.Format($"{stopwatch.Elapsed.TotalSeconds}");
+                    menuSelection = choice.ToLower();
+                }
 
-                            Console.WriteLine("Exiting program...");
-                            return;
-                        }
-                        Console.WriteLine("Enter your option (or type 0 to exit the program)");
-                        Console.WriteLine();
-                        readInputResult = Console.ReadLine();
-                    }
-                    if (!String.IsNullOrEmpty(readInputResult))
+                var acceptableMenuOption = "1 2 3 4 5 6 7 8 0".Split();
+
+                while (!acceptableMenuOption.Contains(menuSelection))
+                {
+                    // application should only be terminated when the user inserts 0.
+                    if (menuSelection.StartsWith("0"))
                     {
-                        menuSelection = readInputResult.ToLower();
+                        Console.WriteLine("Exiting program...");
+                        return;
+                    }
+
+                    if (menuSelection.StartsWith("1"))
+                    {
+                        menuSelection = "1";
+                    }
+
+                    if (menuSelection.StartsWith("2"))
+                    {
+                        menuSelection = "2";
                     }
                 }
 
@@ -74,47 +68,35 @@ namespace code_tracker
                         case "1": // display sessions
                             SessionController showTable = new();
                             showTable.DisplayTable(connection);
-
-                            Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
 
                         case "2"://  create session
                             SessionController createNewSession = new();
                             createNewSession.CreateRecord(connection);
-
-                            Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
 
                         case "3": // search and display info by session
                             Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
 
                         case "4": // search and display session by duration
                             Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
 
                         case "5": // update session
                             Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
 
                         case "6": // delete session
                             Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
 
                         case "7": // delete all database 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
 
                         default:
                             Console.WriteLine("\n\rPress the Enter key to continue.");
-                            readInputResult = Console.ReadLine();
                             break;
                     }
                 }
