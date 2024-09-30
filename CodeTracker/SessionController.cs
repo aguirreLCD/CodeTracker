@@ -1,5 +1,6 @@
 
 using Microsoft.Data.Sqlite;
+using Spectre.Console;
 
 namespace code_tracker
 {
@@ -19,28 +20,25 @@ namespace code_tracker
 
                 using (var reader = displayTableCommand.ExecuteReader())
                 {
-                    Console.WriteLine("\nCurrent Coding Sessions:\n");
-                    Console.Write("{0,-20}", "ID");
-                    Console.Write("{0,-20}", "Date");
-                    Console.Write("{0,-20}", "Start");
-                    Console.Write("{0,-20}", "End");
-                    Console.Write("{0,-20}", "Duration");
-                    Console.WriteLine();
 
-                    const int FieldWidthLeftAligned = -20;
+                    Console.WriteLine("\nCurrent Coding Sessions:\n");
+
+                    // Create a table
+                    var table = new Table();
+                    table.AddColumn("ID");
+                    table.AddColumn("Date");
+                    table.AddColumn("Start");
+                    table.AddColumn("End");
+                    table.AddColumn("Duration");
+
                     Console.WriteLine();
 
                     while (reader.Read())
                     {
-                        Console.Write($"{reader["id"],FieldWidthLeftAligned}");
-                        Console.Write($"{reader["date"],FieldWidthLeftAligned}");
-                        Console.Write($"{reader["startTime"],FieldWidthLeftAligned}");
-                        Console.Write($"{reader["endTime"],FieldWidthLeftAligned}");
-                        Console.Write($"{reader["duration"],FieldWidthLeftAligned}\n");
-                        Console.WriteLine();
-
+                        table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                     }
-                    Console.WriteLine();
+
+                    AnsiConsole.Write(table);
                 }
             }
             catch (SqliteException message)

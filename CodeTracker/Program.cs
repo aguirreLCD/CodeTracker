@@ -17,43 +17,11 @@ namespace code_tracker
 
             Console.WriteLine($"{choice}");
 
-            Console.WriteLine($"{choice.StartsWith("1")}");
-            Console.WriteLine($"{choice.StartsWith("2")}");
-            Console.WriteLine($"{choice.StartsWith("0")}");
 
             while (menuSelection != "0")
             {
 
-                // Console.Clear();
-
-                // Console.WriteLine($"{choice.StartsWith("1")}");
-                // Console.WriteLine($"{choice.StartsWith("2")}");
-                // Console.WriteLine($"{choice.StartsWith("0")}");
-
-                // AnsiConsole.MarkupLineInterpolated($"Hello, [blue]{choice}[/]");
-                // AnsiConsole.MarkupLine($"Hello, [blue]{choice}[/]");
-
-                // Console.WriteLine("Welcome to the Code Tracker App in C#");
-                // Console.WriteLine("------------------------\n");
-
-                // Console.WriteLine("Your main menu options are:");
-                // Console.WriteLine("------------------------\n");
-
-                // Console.WriteLine("1. To display all current table in database, type: 1");
-                // Console.WriteLine("2. To create new session, type: 2");
-                // Console.WriteLine("3. To search specific code session, type: 3");
-                // Console.WriteLine("4. To search code sessions by date, type: 4");
-                // Console.WriteLine("5. To update a code session, type: 5");
-                // Console.WriteLine("6. To delete a code session, type: 6");
-                // Console.WriteLine("7. To delete all code sessions, type: 7");
-
-                // Console.WriteLine();
-                // Console.WriteLine("Enter your option (or type 0 to Exit the program)");
-                // Console.WriteLine();
-
-
                 readInputResult = Console.ReadLine();
-                // readInputResult = choice;
 
                 var acceptableMenuOption = "1 2 3 4 5 6 7 8".Split();
 
@@ -84,7 +52,6 @@ namespace code_tracker
                     }
                 }
 
-                
                 // create DB, Table, Open connection
                 string? connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
