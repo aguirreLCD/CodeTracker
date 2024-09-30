@@ -9,8 +9,11 @@ namespace code_tracker
     {
         static void Main(string[] args)
         {
+            // var name = UserInput.AskName();
 
-            var name = UserInput.AskName();
+            var option = UserInput.AskRange();
+
+            var userName = UserInput.AskUserName();
 
             string? menuSelection = "";
 

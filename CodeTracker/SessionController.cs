@@ -36,7 +36,7 @@ namespace code_tracker
                         table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                     }
 
-                    table.Expand();
+                    // table.Expand();
                     AnsiConsole.Write(table);
                 }
             }
@@ -88,7 +88,8 @@ namespace code_tracker
         {
             try
             {
-                var id = AnsiConsole.Prompt(new TextPrompt<int>("What session you want to delete? type id:"));
+                var id = AnsiConsole.Prompt(new TextPrompt<int>("What session you want to delete? type id:")
+                .PromptStyle("red"));
 
                 using (var deleteTransaction = connection.BeginTransaction())
                 {
@@ -115,8 +116,6 @@ namespace code_tracker
                 Console.WriteLine(message.ErrorCode);
                 throw;
             }
-
         }
     }
-
 }
