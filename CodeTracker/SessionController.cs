@@ -25,18 +25,18 @@ namespace code_tracker
                 {
                     if (reader.HasRows)
                     {
-                        Console.WriteLine("\nCurrent Coding Sessions FROM GETDATA:");
+                        // Console.WriteLine("\nCurrent Coding Sessions from GetResultsFromDatabase:");
                         // Create a table
-                        var table = new Table();
-                        table.AddColumn("[red]ID[/]");
-                        table.AddColumn("[red]Date[/]");
-                        table.AddColumn("[red]Start[/]");
-                        table.AddColumn("[red]End[/]");
-                        table.AddColumn("[red]Duration[/]");
+                        // var table = new Table();
+                        // table.AddColumn("[red]ID[/]");
+                        // table.AddColumn("[red]Date[/]");
+                        // table.AddColumn("[red]Start[/]");
+                        // table.AddColumn("[red]End[/]");
+                        // table.AddColumn("[red]Duration[/]");
 
                         while (reader.Read())
                         {
-                            // and store the results in a List<Sessions> codeSessions
+                            // store the results in a List<Sessions> codeSessions
                             codeSessions.Add(
                                 new Sessions
                                 {
@@ -47,18 +47,9 @@ namespace code_tracker
                                     duration = reader["duration"].ToString()
                                 });
 
-                            table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
+                            // table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                         }
-                        AnsiConsole.Write(table);
-
-                        foreach (var session in codeSessions)
-                        {
-                            Console.WriteLine(session.id);
-                            Console.WriteLine(session.date);
-                            Console.WriteLine(session.startTime);
-                            Console.WriteLine(session.endTime);
-                            Console.WriteLine(session.duration);
-                        }
+                        // AnsiConsole.Write(table);
                     }
                     else
                     {
@@ -66,15 +57,15 @@ namespace code_tracker
                     }
                 }
             }
-
+            // call to ShowTable Method from DisplayTable class
             DisplayTable showResults = new();
             showResults.ShowTable(codeSessions);
 
             return codeSessions;
         }
 
-
-        internal void DisplayTable(SqliteConnection connection)
+        // connect to an SQLite database, execute a query, create a table from Spectre Console, display table from Spectre Console:
+        internal void PrintTable(SqliteConnection connection)
         {
             var displayTableCommand = connection.CreateCommand();
 
@@ -103,6 +94,7 @@ namespace code_tracker
                     }
 
                     // table.Expand();
+                    // Display the List
                     AnsiConsole.Write(table);
                 }
             }
@@ -113,6 +105,7 @@ namespace code_tracker
                 throw;
             }
         }
+
 
         internal void CreateRecord(SqliteConnection connection)
         {
@@ -182,9 +175,12 @@ namespace code_tracker
                 throw;
             }
         }
-        internal void CalculateSessionTime(SqliteConnection connection)
-        {
 
+        // TODO:
+        // use today WHERE date='02-10-2024';
+        // check for null references on formatted hours;
+        internal List<Sessions> CalculateSessionTime(SqliteConnection connection)
+        {
             List<Sessions> calculateSessionsTable = new List<Sessions>();
 
             var dayToCalculate = DateTime.Now;
@@ -252,13 +248,13 @@ namespace code_tracker
                     }
                     AnsiConsole.Write(table);
 
-                    foreach (var session in calculateSessionsTable)
-                    {
-                        Console.WriteLine(session.date);
-                        Console.WriteLine(session.startTime);
-                        Console.WriteLine(session.endTime);
-                        Console.WriteLine(session.duration);
-                    }
+                    // foreach (var session in calculateSessionsTable)
+                    // {
+                    //     Console.WriteLine(session.date);
+                    //     Console.WriteLine(session.startTime);
+                    //     Console.WriteLine(session.endTime);
+                    //     Console.WriteLine(session.duration);
+                    // }
                 }
             }
             catch (SqliteException message)
@@ -267,6 +263,14 @@ namespace code_tracker
                 Console.WriteLine(message.ErrorCode);
                 throw;
             }
+
+            Console.WriteLine("\nToday's Coding Session Duration:");
+
+            // call to ShowTable Method from DisplayTable class
+            DisplayTable showResults = new();
+            showResults.ShowTable(calculateSessionsTable);
+
+            return calculateSessionsTable;
         }
     }
 }

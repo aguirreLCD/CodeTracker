@@ -66,6 +66,7 @@ namespace code_tracker
 
         public static string AskUserInput()
         {
+
             var choices = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<string>()
                     .PageSize(10)
@@ -74,10 +75,10 @@ namespace code_tracker
                     .InstructionsText("[grey](Press [blue]<space>[/] to toggle a choice, [green]<enter>[/] to accept)[/]")
                     .AddChoiceGroup("Your main menu options are", new[]
                     {
-                        "1. To display all current table in database, type 1",
+                        "1. To PrintTable, type 1",
                         "2. To create new session, type 2",
-                        "3. To calculate session duration, type 3",
-                        "4. To populate List session, type 4",
+                        "3. To calculate today's session duration, type 3",
+                        "4. To Display->ShowTable, type 4",
                         "6. To delete one session by ID, type 6",
                         "0. To exit the program, type 0",
                     }));

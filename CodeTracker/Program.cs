@@ -11,6 +11,8 @@ namespace code_tracker
             // var option = UserInput.AskRange();
             // var userName = UserInput.AskUserName();
 
+            Console.Clear();
+
             string? menuSelection = "";
 
             while (menuSelection != "0")
@@ -53,7 +55,7 @@ namespace code_tracker
                     {
                         case "1": // display sessions
                             SessionController showTable = new();
-                            showTable.DisplayTable(connection);
+                            showTable.PrintTable(connection);
 
                             break;
 
@@ -63,15 +65,15 @@ namespace code_tracker
 
                             break;
 
-                        case "3": // search and display info by session
+                        case "3": // calculate session duration
                             SessionController calculateSession = new();
                             calculateSession.CalculateSessionTime(connection);
 
                             break;
 
-                        case "4": // search and display session by duration
-                            SessionController shooooowww = new();
-                            shooooowww.GetResultsFromDatabase(connection);
+                        case "4": // 
+                            SessionController showList = new();
+                            showList.GetResultsFromDatabase(connection);
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
