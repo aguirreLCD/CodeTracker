@@ -1,8 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Configuration;
-using System.Diagnostics;
-using Spectre.Console;
-using System.Collections.Generic;
 
 namespace code_tracker
 {
@@ -11,11 +8,8 @@ namespace code_tracker
         static void Main(string[] args)
         {
             // var name = UserInput.AskName();
-
             // var option = UserInput.AskRange();
-
             // var userName = UserInput.AskUserName();
-
 
             string? menuSelection = "";
 
@@ -45,6 +39,7 @@ namespace code_tracker
                     try
                     {
                         connection.Open();
+
                         DBManager databaseManager = new();
                         databaseManager.CreateDBTable(connection);
                     }
@@ -76,8 +71,7 @@ namespace code_tracker
 
                         case "4": // search and display session by duration
                             SessionController shooooowww = new();
-                            shooooowww.GetData(connection);
-
+                            shooooowww.GetResultsFromDatabase(connection);
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;

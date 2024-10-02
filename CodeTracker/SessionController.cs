@@ -1,7 +1,6 @@
 
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
-using System.Collections.Generic;
 
 namespace code_tracker
 {
@@ -9,7 +8,7 @@ namespace code_tracker
     {
         // To save a database table into a List<> using Microsoft.Data.Sqlite,
         // how to connect to an SQLite database, execute a query, and store the results in a List<Sessions>
-        internal List<Sessions> GetData(SqliteConnection connection)
+        internal List<Sessions> GetResultsFromDatabase(SqliteConnection connection)
         {
             List<Sessions> codeSessions = new List<Sessions>();
 
@@ -26,7 +25,6 @@ namespace code_tracker
                 {
                     if (reader.HasRows)
                     {
-
                         Console.WriteLine("\nCurrent Coding Sessions FROM GETDATA:");
                         // Create a table
                         var table = new Table();
@@ -51,7 +49,7 @@ namespace code_tracker
 
                             table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                         }
-                        // AnsiConsole.Write(table);
+                        AnsiConsole.Write(table);
 
                         foreach (var session in codeSessions)
                         {
@@ -61,11 +59,6 @@ namespace code_tracker
                             Console.WriteLine(session.endTime);
                             Console.WriteLine(session.duration);
                         }
-
-                        Console.WriteLine(codeSessions.Count());
-                        Console.WriteLine(codeSessions.GetType());
-                        // Console.WriteLine(codeSessions.ToString());
-
                     }
                     else
                     {
@@ -73,20 +66,14 @@ namespace code_tracker
                     }
                 }
             }
-            // Shooow(codeSessions);
+
+            DisplayTable showResults = new();
+            showResults.ShowTable(codeSessions);
 
             return codeSessions;
         }
 
-        // internal void Shooow<Sessions>(List<Sessions> codeSessions)
-        // {
-        //     foreach (var code in codeSessions)
-        //     {
-        //         Console.WriteLine();
-        //         Console.WriteLine(code);
-        //         Console.WriteLine();
-        //     }
-        // }
+
         internal void DisplayTable(SqliteConnection connection)
         {
             var displayTableCommand = connection.CreateCommand();
@@ -126,7 +113,6 @@ namespace code_tracker
                 throw;
             }
         }
-
 
         internal void CreateRecord(SqliteConnection connection)
         {
