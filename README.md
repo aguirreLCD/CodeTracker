@@ -86,10 +86,18 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - [x] Create Table;
 - Create a model class: Session.cs;
 - [] Create CRUD Methods:
+
   - [] Create session;
   - [] Display sessions;
+
+    - PrintTable() method => connect to SQLite DB, execute a query, create a Table from Spectre.Console, reader Add table rows, Display table from Spectre.Console;
+
+    - GetResultsFromDatabase() method => create new List that use a model class: Sessions.cs, connect to SQLite DB, execute a query, use SQLiteDataReader to Add (store) rows into List (using ToString()), call ShowTable method to display table using Spectre.Console;
+
+
   - [] Update session;
   - [] Delete session;
+
 - [] Implement Lists;
 - [] Validation for user input;
 - [] Handle errors:

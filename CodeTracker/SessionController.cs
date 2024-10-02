@@ -94,7 +94,7 @@ namespace code_tracker
                     }
 
                     // table.Expand();
-                    // Display the List
+                    // Display table from Spectre.Console
                     AnsiConsole.Write(table);
                 }
             }
