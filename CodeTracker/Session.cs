@@ -1,3 +1,4 @@
+
 namespace code_tracker
 {
     internal class Session
@@ -9,3 +10,5 @@ namespace code_tracker
         public string? duration { get; set; }
     }
 }
+// Create a model class:
+// Define a class that represents the structure of your table.

@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using Spectre.Console;
+using System.Collections.Generic;
 
 namespace code_tracker
 {
@@ -14,6 +15,12 @@ namespace code_tracker
             // var option = UserInput.AskRange();
 
             // var userName = UserInput.AskUserName();
+
+
+
+
+
+
 
 
             string? menuSelection = "";
@@ -74,6 +81,10 @@ namespace code_tracker
                             break;
 
                         case "4": // search and display session by duration
+                            SessionController shooooowww = new();
+                            shooooowww.GetData();
+
+
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 

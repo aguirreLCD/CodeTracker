@@ -84,6 +84,7 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - [x] In the root of the project, create a new file named App.config and set the key for DB Connection string;
 - [x] Create Database and open Database connection;
 - [x] Create Table;
+- Create a model class: Session.cs;
 - [] Create CRUD Methods:
   - [] Create session;
   - [] Display sessions;
@@ -129,7 +130,8 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - internal classes;
 - TimeSpan;
 - Stopwatch;
-
+- Retrieve data from the database: <>List;
+- Use the Microsoft.Data.Sqlite library to query the database and populate a List<Session>.
 <!--
 
 git add .
@@ -142,7 +144,7 @@ git log --pretty=format:"%ad - %an: %s" > git_log.txt
 
 git log --pretty=format:'%h was %an, %ar, message: %s' > log.log
 
-  -->
+-->
 
 <!--
 
@@ -159,3 +161,19 @@ sqlite> SELECT * FROM sessions;
 INSERT INTO sessions (date, duration) VALUES ('today', 'now');
 sqlite>.exit
  -->
+
+<!--
+
+
+/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/SessionController.cs(213,51): warning CS8600: Converting null literal or possible null value to non-nullable type. [/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/CodeTracker.csproj]
+/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/SessionController.cs(216,67): warning CS8604: Possible null reference argument for parameter 's' in 'DateTime DateTime.Parse(string s)'. [/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/CodeTracker.csproj]
+/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/SessionController.cs(223,53): warning CS8600: Converting null literal or possible null value to non-nullable type. [/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/CodeTracker.csproj]
+/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/SessionController.cs(226,69): warning CS8604: Possible null reference argument for parameter 's' in 'DateTime DateTime.Parse(string s)'. [/Users/lilian/Dev/cSharpProjects/CodeTracker/CodeTracker/CodeTracker.csproj]
+
+
+ -->
+
+<!--
+01/10=>
+To save a database table into a List<> using Microsoft.Data.Sqlite, 
+- how to connect to an SQLite database, execute a query, and store the results in a List<Sessions> -->

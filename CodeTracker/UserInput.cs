@@ -1,5 +1,4 @@
 using Spectre.Console;
-using Microsoft.Data.Sqlite;
 
 namespace code_tracker
 {
@@ -77,7 +76,8 @@ namespace code_tracker
                     {
                         "1. To display all current table in database, type 1",
                         "2. To create new session, type 2",
-                        "3. To calculate  session, type 3",
+                        "3. To calculate session duration, type 3",
+                        "4. To populate List session, type 4",
                         "6. To delete one session by ID, type 6",
                         "0. To exit the program, type 0",
                     }));

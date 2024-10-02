@@ -1,11 +1,76 @@
 
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
+using System.Collections.Generic;
 
 namespace code_tracker
 {
     internal class SessionController
     {
+        internal List<Session> GetData()
+        {
+            List<Session> codeSessions = new List<Session>();
+
+            // var codeSessions = new List<Session>();
+
+            string connectionString = "Data Source=codesessions.db";
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query =
+                @"
+                    SELECT *
+                    FROM sessions;
+                ";
+
+                using (var command = new SqliteCommand(query, connection))
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var item = new Session
+                            {
+                                id = reader.GetInt32(0),
+                                date = reader.GetString(0),
+                                startTime = reader.GetString(0),
+                                endTime = reader.GetString(0),
+                                duration = reader.GetString(0)
+                            };
+
+                            codeSessions.Add(item);
+
+                            Console.Write($"{reader["id"]}\t");
+                            Console.Write($"{reader["date"]}\t");
+                            Console.Write($"{reader["startTime"]}\t");
+                            Console.Write($"{reader["endTime"]}\t");
+                            Console.Write($"{reader["duration"]}\t");
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n\nNo rows found.\n\n");
+                    }
+                }
+            }
+            Shooow(codeSessions);
+            return codeSessions;
+        }
+
+        internal void Shooow<Session>(List<Session> codeSessions)
+        {
+            foreach (var code in codeSessions)
+            {
+                Console.WriteLine();
+                Console.WriteLine(code);
+                // Console.WriteLine(code?.ToString());
+                Console.WriteLine();
+            }
+        }
         internal void DisplayTable(SqliteConnection connection)
         {
             var displayTableCommand = connection.CreateCommand();
@@ -20,7 +85,6 @@ namespace code_tracker
 
                 using (var reader = displayTableCommand.ExecuteReader())
                 {
-
                     Console.WriteLine("\nCurrent Coding Sessions:");
                     // Create a table
                     var table = new Table();
@@ -47,6 +111,7 @@ namespace code_tracker
             }
         }
 
+
         internal void CreateRecord(SqliteConnection connection)
         {
             var currentDate = DateTime.Now;
@@ -71,15 +136,14 @@ namespace code_tracker
 
                 insertCommand.CommandText =
                 insertCommand.CommandText =
-                $"INSERT INTO sessions(date, startTime, endTime) VALUES('{formattedDay}', '{startHour}', '{formattedEndHour}' )";
+                $"INSERT INTO sessions(date, startTime) VALUES('{formattedDay}', '{startHour}')";
 
                 insertCommand.ExecuteNonQuery();
                 insertTransaction.Commit();
 
                 Console.WriteLine();
-                Console.WriteLine($"Session: {formattedDay}\t{startHour}\t {formattedEndHour}\t inserted.");
+                Console.WriteLine($"Session: {formattedDay}\t{startHour}\t inserted.");
                 Console.WriteLine();
-
             }
         }
 
@@ -107,7 +171,6 @@ namespace code_tracker
 
                     Console.WriteLine();
                     AnsiConsole.MarkupLine("Deleted: [yellow]{0}[/]", id);
-
                 }
             }
             catch (SqliteException message)
@@ -117,65 +180,11 @@ namespace code_tracker
                 throw;
             }
         }
-
-        internal void EndSessionTime(SqliteConnection connection)
-        {
-
-            var dayToCalculate = DateTime.Now;
-
-            string today = dayToCalculate.ToString("dd-MM-yyyy");
-
-            // Console.WriteLine(today);
-
-            var calculateCommand = connection.CreateCommand();
-
-            try
-            {
-                calculateCommand.CommandText =
-                @"
-                   SELECT date, startTime, endTime FROM sessions WHERE date='30-09-2024' ORDER BY id DESC LIMIT 1;
-                ";
-
-                using (var reader = calculateCommand.ExecuteReader())
-                {
-                    var calcTable = new Table();
-                    calcTable.AddColumn("[red]Date[/]");
-                    calcTable.AddColumn("[red]Start[/]");
-                    calcTable.AddColumn("[red]End[/]");
-                    // table.AddColumn("[red]Duration[/]");
-
-                    while (reader.Read())
-                    {
-                        // var endTime = reader["startTime"];
-                        // Console.WriteLine(endTime);
-
-                        // table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
-                        calcTable.AddRow($"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}");
-                    }
-
-                    // table.Expand();
-                    AnsiConsole.Write(calcTable);
-
-                }
-            }
-            catch (SqliteException message)
-            {
-                Console.WriteLine(message.Message);
-                Console.WriteLine(message.ErrorCode);
-                throw;
-            }
-        }
-
-
-
         internal void CalculateSessionTime(SqliteConnection connection)
         {
-
             var dayToCalculate = DateTime.Now;
 
             string today = dayToCalculate.ToString("dd-MM-yyyy");
-
-            // Console.WriteLine(today);
 
             var calculateCommand = connection.CreateCommand();
 
@@ -195,47 +204,33 @@ namespace code_tracker
                 using (var reader = calculateCommand.ExecuteReader())
                 {
 
-                    // Console.WriteLine("\nCurrent Coding Sessions:");
-                    // Create a table
                     var table = new Table();
-                    // table.AddColumn("[red]ID[/]");
                     table.AddColumn("[red]Date[/]");
                     table.AddColumn("[red]Start[/]");
                     table.AddColumn("[red]End[/]");
                     table.AddColumn("[red]Duration[/]");
 
-
                     while (reader.Read())
                     {
                         var endTime = reader["MaxStartTime"];
-                        Console.WriteLine(endTime);
 
                         string formattedEndHour = endTime.ToString();
-                        Console.WriteLine(formattedEndHour);
 
                         DateTime theEndOfSession = DateTime.Parse(formattedEndHour);
-                        Console.WriteLine(theEndOfSession);
-
 
                         var startTime = reader["MinStartTime"];
-                        Console.WriteLine(startTime);
 
                         string formattedStartHour = startTime.ToString();
-                        Console.WriteLine(formattedStartHour);
 
                         DateTime theStartOfSession = DateTime.Parse(formattedStartHour);
-                        Console.WriteLine(theStartOfSession);
 
                         TimeSpan difference = theEndOfSession - theStartOfSession;
                         Console.WriteLine(difference);
                         Console.WriteLine(difference.TotalHours);
                         Console.WriteLine(difference.TotalMinutes);
 
-                        // table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                         table.AddRow($"{reader["date"]}", $"{reader["MinStartTime"]}", $"{reader["MaxStartTime"]}", $"{difference}");
                     }
-
-                    // table.Expand();
                     AnsiConsole.Write(table);
                 }
             }
@@ -245,13 +240,6 @@ namespace code_tracker
                 Console.WriteLine(message.ErrorCode);
                 throw;
             }
-
         }
-
-
-
-
-
-
     }
 }
