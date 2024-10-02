@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Spectre.Console;
 
 namespace code_tracker
@@ -51,8 +50,3 @@ namespace code_tracker
     }
 }
 
-// static void Main()
-// {
-//     List<string> results = GetResultsFromDatabase();
-//     DisplayList(results);
-// }

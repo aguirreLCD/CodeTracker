@@ -84,33 +84,39 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - [x] In the root of the project, create a new file named App.config and set the key for DB Connection string;
 - [x] Create Database and open Database connection;
 - [x] Create Table;
-- Create a model class: Session.cs;
+- [x] Create a model class: Session.cs;
 - [] Create CRUD Methods:
 
-  - [] Create session;
-  - [] Display sessions;
+  - [x] Create session;
+  - [x] Display sessions;
 
     - PrintTable() method => connect to SQLite DB, execute a query, create a Table from Spectre.Console, reader Add table rows, Display table from Spectre.Console;
 
     - GetResultsFromDatabase() method => create new List that use a model class: Sessions.cs, connect to SQLite DB, execute a query, use SQLiteDataReader to Add (store) rows into List (using ToString()), call ShowTable method to display table using Spectre.Console;
 
   - [] Update session;
-  - [] Delete session;
+  - [x] Delete session;
 
-- [] Implement Lists;
+- [x] Implement Lists;
 - [] Validation for user input;
 - [] Handle errors:
 
-- [] Use Spectre.Console:  
-  `dotnet add package Spectre.Console`
+- [x] Use Spectre.Console:  
+       `dotnet add package Spectre.Console`
 
   `dotnet add package Spectre.Console.Cli`
+
+- [] Create a git branch:  
+- [] Install Dapper (micro) ORM: Object Relational Mapping library:    
+  `dotnet add package Dapper`
+
+- [] Use Dapper ORM to data access;
 
 - [] Keep practicing;
 - [] Improve README file;
 - [] Improve documentation;
 
-- [] Export git log history to a text file:
+- [x] Export git log history to a text file:
 
   - `git log -p --all > git_log.txt`
 
@@ -138,7 +144,9 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - TimeSpan;
 - Stopwatch;
 - Retrieve data from the database: <>List;
-- Use the Microsoft.Data.Sqlite library to query the database and populate a List<Session>.
+- Use the Microsoft.Data.Sqlite library to query the database and populate a List<Session>;
+
+- Dapper is an open-source object-relational mapping (ORM) library for.NET and.NET Core applications. The library allows developers quickly and easily access data from databases without the need to write tedious code.
 <!--
 
 git add .
@@ -187,52 +195,8 @@ To save a database table into a List<> using Microsoft.Data.Sqlite,
 
 <!--
 
-
- // var codeSessions = new List<Session>();
-
-            // string connectionString = "Data Source=codesessions.db";
-
-            // using (var tableCmd = connection.CreateCommand())
-            // {
-
-            //     string query =
-            //     @"
-            //         SELECT *
-            //         FROM sessions;
-            //     ";
-
-            //     using (var command = new SqliteCommand(query, connection))
-            //     using (var reader = command.ExecuteReader())
-            //     {
-            //         if (reader.HasRows)
-            //         {
-            //             while (reader.Read())
-            //             {
-            //                 var item = new Session
-            //                 {
-            //                     id = reader.GetInt32(0),
-            //                     date = reader.GetString(0),
-            //                     startTime = reader.GetString(0),
-            //                     endTime = reader.GetString(0),
-            //                     duration = reader.GetString(0)
-            //                 };
-
-            //                 codeSessions.Add(item);
-
-            //                 Console.Write($"{reader["id"]}\t");
-            //                 Console.Write($"{reader["date"]}\t");
-            //                 Console.Write($"{reader["startTime"]}\t");
-            //                 Console.Write($"{reader["endTime"]}\t");
-            //                 Console.Write($"{reader["duration"]}\t");
-            //                 Console.WriteLine();
-            //             }
-            //         }
-            //         else
-            //         {
-            //             Console.WriteLine("\n\nNo rows found.\n\n");
-            //         }
-            //     }
-
+03/10=> 
+To access the List in Other Methods
 
  -->
 
@@ -243,3 +207,8 @@ Code = 80004005
 at System.Net.Sockets.Socket.Send(ReadOnlySpan`1 buffer, SocketFlags socketFlags)
    at System.IO.Pipes.PipeStream.WriteCore(ReadOnlySpan`1 buffer)
 Internal error in the debugger. -->
+
+
+<!-- 
+
+ -->
