@@ -20,20 +20,11 @@ namespace code_tracker
                     SELECT *
                     FROM sessions;
                 ";
-
+                //  read table into a List
                 using (SqliteDataReader reader = tableCmd.ExecuteReader())
                 {
                     if (reader.HasRows)
                     {
-                        // Console.WriteLine("\nCurrent Coding Sessions from GetResultsFromDatabase:");
-                        // Create a table
-                        // var table = new Table();
-                        // table.AddColumn("[red]ID[/]");
-                        // table.AddColumn("[red]Date[/]");
-                        // table.AddColumn("[red]Start[/]");
-                        // table.AddColumn("[red]End[/]");
-                        // table.AddColumn("[red]Duration[/]");
-
                         while (reader.Read())
                         {
                             // store the results in a List<Sessions> codeSessions
@@ -46,10 +37,7 @@ namespace code_tracker
                                     endTime = reader["endTime"].ToString(),
                                     duration = reader["duration"].ToString()
                                 });
-
-                            // table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                         }
-                        // AnsiConsole.Write(table);
                     }
                     else
                     {
@@ -92,7 +80,6 @@ namespace code_tracker
                     {
                         table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                     }
-
                     // table.Expand();
                     // Display table from Spectre.Console
                     AnsiConsole.Write(table);
@@ -105,8 +92,6 @@ namespace code_tracker
                 throw;
             }
         }
-
-
         internal void CreateRecord(SqliteConnection connection)
         {
             var currentDate = DateTime.Now;

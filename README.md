@@ -94,7 +94,6 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 
     - GetResultsFromDatabase() method => create new List that use a model class: Sessions.cs, connect to SQLite DB, execute a query, use SQLiteDataReader to Add (store) rows into List (using ToString()), call ShowTable method to display table using Spectre.Console;
 
-
   - [] Update session;
   - [] Delete session;
 
@@ -237,10 +236,10 @@ To save a database table into a List<> using Microsoft.Data.Sqlite,
 
  -->
 
-Internal error in the debugger.
+<!-- Internal error in the debugger.
 Exception = System.Net.Sockets.SocketException
 Message = Broken pipe
 Code = 80004005
 at System.Net.Sockets.Socket.Send(ReadOnlySpan`1 buffer, SocketFlags socketFlags)
    at System.IO.Pipes.PipeStream.WriteCore(ReadOnlySpan`1 buffer)
-Internal error in the debugger.
+Internal error in the debugger. -->

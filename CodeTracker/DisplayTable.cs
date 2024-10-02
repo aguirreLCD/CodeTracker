@@ -8,9 +8,7 @@ namespace code_tracker
         // Access the List in Other Methods
         internal void ShowTable(List<Sessions> codeSessions)
         {
-            // Console.WriteLine("\n\n");
-
-            // Create a table
+            // Create a table from Spectre Console:
             var table = new Table();
             table.AddColumn("[red]ID[/]");
             table.AddColumn("[red]Date[/]");
@@ -20,7 +18,6 @@ namespace code_tracker
 
             foreach (var session in codeSessions)
             {
-                // Console.WriteLine("DisplayTable class -> ShowTable method");
                 // Console.WriteLine(session.id);
                 // Console.WriteLine(session.date);
                 // Console.WriteLine(session.startTime);
@@ -29,8 +26,8 @@ namespace code_tracker
 
                 table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
             }
-            Console.WriteLine("\nCurrent Coding Sessions from ShowTable:");
-            // Display the List
+            // Display table from Spectre Console:
+            Console.WriteLine("\nCurrent Coding Sessions:");
             AnsiConsole.Write(table);
         }
 
