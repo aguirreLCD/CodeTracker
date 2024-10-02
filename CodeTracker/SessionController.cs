@@ -141,8 +141,6 @@ namespace code_tracker
                 Console.WriteLine();
             }
         }
-
-
         internal void DeleteRecord(SqliteConnection connection)
         {
             try
@@ -204,49 +202,52 @@ namespace code_tracker
                 ";
                 using (var reader = calculateCommand.ExecuteReader())
                 {
-                    var table = new Table();
-                    table.AddColumn("[red]Date[/]");
-                    table.AddColumn("[red]Start[/]");
-                    table.AddColumn("[red]End[/]");
-                    table.AddColumn("[red]Duration[/]");
+                    // var table = new Table();
+                    // table.AddColumn("[red]Date[/]");
+                    // table.AddColumn("[red]Start[/]");
+                    // table.AddColumn("[red]End[/]");
+                    // table.AddColumn("[red]Duration[/]");
 
                     while (reader.Read())
                     {
-                        var endTime = reader["MaxStartTime"];
+                        if (reader.HasRows)
+                        {
+                            var endTime = reader["MaxStartTime"];
 
-                        string? formattedEndHour = endTime.ToString();
+                            string? formattedEndHour = endTime.ToString();
 
-                        DateTime theEndOfSession = DateTime.Parse(formattedEndHour);
+                            DateTime theEndOfSession = DateTime.Parse(formattedEndHour);
 
-                        var startTime = reader["MinStartTime"];
+                            var startTime = reader["MinStartTime"];
 
-                        string? formattedStartHour = startTime.ToString();
+                            string? formattedStartHour = startTime.ToString();
 
-                        DateTime theStartOfSession = DateTime.Parse(formattedStartHour);
+                            DateTime theStartOfSession = DateTime.Parse(formattedStartHour);
 
-                        TimeSpan difference = theEndOfSession - theStartOfSession;
-                        Console.WriteLine(difference);
-                        Console.WriteLine(difference.TotalHours);
-                        Console.WriteLine(difference.TotalMinutes);
+                            TimeSpan difference = theEndOfSession - theStartOfSession;
+                            // Console.WriteLine(difference);
+                            // Console.WriteLine(difference.TotalHours);
+                            // Console.WriteLine(difference.TotalMinutes);
 
-                        string? formattedDifference = difference.ToString();
+                            string? formattedDifference = difference.ToString();
 
-                        table.AddRow($"{reader["date"]}", $"{reader["MinStartTime"]}", $"{reader["MaxStartTime"]}", $"{difference}");
+                            // table.AddRow($"{reader["date"]}", $"{reader["MinStartTime"]}", $"{reader["MaxStartTime"]}", $"{difference}");
 
-                        var duration = formattedDifference;
-                        Console.WriteLine(formattedDifference);
+                            var duration = formattedDifference;
+                            // Console.WriteLine(formattedDifference);
 
-                        // and store the results in a List<Sessions> codeSessions
-                        calculateSessionsTable.Add(
-                            new Sessions
-                            {
-                                date = reader["date"].ToString(),
-                                startTime = reader["MinStartTime"].ToString(),
-                                endTime = reader["MaxStartTime"].ToString(),
-                                duration = formattedDifference,
-                            });
+                            // and store the results in a List<Sessions> codeSessions
+                            calculateSessionsTable.Add(
+                                new Sessions
+                                {
+                                    date = reader["date"].ToString(),
+                                    startTime = reader["MinStartTime"].ToString(),
+                                    endTime = reader["MaxStartTime"].ToString(),
+                                    duration = formattedDifference,
+                                });
+                        }
                     }
-                    AnsiConsole.Write(table);
+                    // AnsiConsole.Write(table);
 
                     // foreach (var session in calculateSessionsTable)
                     // {
@@ -268,7 +269,7 @@ namespace code_tracker
 
             // call to ShowTable Method from DisplayTable class
             DisplayTable showResults = new();
-            showResults.ShowTable(calculateSessionsTable);
+            showResults.ShowDurationTable(calculateSessionsTable);
 
             return calculateSessionsTable;
         }

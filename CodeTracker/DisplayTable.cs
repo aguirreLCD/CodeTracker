@@ -28,15 +28,28 @@ namespace code_tracker
                 // Console.WriteLine(session.duration);
 
                 table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
-
             }
-
             Console.WriteLine("\nCurrent Coding Sessions from ShowTable:");
-
             // Display the List
-
             AnsiConsole.Write(table);
+        }
 
+
+        internal void ShowDurationTable(List<Sessions> calculateSessionsTable)
+        {
+            var table = new Table();
+            table.AddColumn("[red]Date[/]");
+            table.AddColumn("[red]Start[/]");
+            table.AddColumn("[red]End[/]");
+            table.AddColumn("[red]Duration[/]");
+
+            foreach (var session in calculateSessionsTable)
+            {
+                table.AddRow($"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
+            }
+            // Display the List
+            // Console.WriteLine("\nShowDurationTable:");
+            AnsiConsole.Write(table);
         }
     }
 }
