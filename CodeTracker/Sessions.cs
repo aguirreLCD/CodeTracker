@@ -1,7 +1,7 @@
 
 namespace code_tracker
 {
-    internal class Session
+    public class Sessions
     {
         public int? id { get; set; }
         public string? date { get; set; }

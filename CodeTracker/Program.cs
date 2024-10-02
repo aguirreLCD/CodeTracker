@@ -17,12 +17,6 @@ namespace code_tracker
             // var userName = UserInput.AskUserName();
 
 
-
-
-
-
-
-
             string? menuSelection = "";
 
             while (menuSelection != "0")
@@ -82,7 +76,7 @@ namespace code_tracker
 
                         case "4": // search and display session by duration
                             SessionController shooooowww = new();
-                            shooooowww.GetData();
+                            shooooowww.GetData(connection);
 
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");

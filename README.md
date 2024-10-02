@@ -175,5 +175,64 @@ sqlite>.exit
 
 <!--
 01/10=>
-To save a database table into a List<> using Microsoft.Data.Sqlite, 
+To save a database table into a List<> using Microsoft.Data.Sqlite,
 - how to connect to an SQLite database, execute a query, and store the results in a List<Sessions> -->
+
+<!--
+
+
+ // var codeSessions = new List<Session>();
+
+            // string connectionString = "Data Source=codesessions.db";
+
+            // using (var tableCmd = connection.CreateCommand())
+            // {
+
+            //     string query =
+            //     @"
+            //         SELECT *
+            //         FROM sessions;
+            //     ";
+
+            //     using (var command = new SqliteCommand(query, connection))
+            //     using (var reader = command.ExecuteReader())
+            //     {
+            //         if (reader.HasRows)
+            //         {
+            //             while (reader.Read())
+            //             {
+            //                 var item = new Session
+            //                 {
+            //                     id = reader.GetInt32(0),
+            //                     date = reader.GetString(0),
+            //                     startTime = reader.GetString(0),
+            //                     endTime = reader.GetString(0),
+            //                     duration = reader.GetString(0)
+            //                 };
+
+            //                 codeSessions.Add(item);
+
+            //                 Console.Write($"{reader["id"]}\t");
+            //                 Console.Write($"{reader["date"]}\t");
+            //                 Console.Write($"{reader["startTime"]}\t");
+            //                 Console.Write($"{reader["endTime"]}\t");
+            //                 Console.Write($"{reader["duration"]}\t");
+            //                 Console.WriteLine();
+            //             }
+            //         }
+            //         else
+            //         {
+            //             Console.WriteLine("\n\nNo rows found.\n\n");
+            //         }
+            //     }
+
+
+ -->
+
+Internal error in the debugger.
+Exception = System.Net.Sockets.SocketException
+Message = Broken pipe
+Code = 80004005
+at System.Net.Sockets.Socket.Send(ReadOnlySpan`1 buffer, SocketFlags socketFlags)
+   at System.IO.Pipes.PipeStream.WriteCore(ReadOnlySpan`1 buffer)
+Internal error in the debugger.

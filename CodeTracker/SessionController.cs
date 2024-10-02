@@ -7,49 +7,65 @@ namespace code_tracker
 {
     internal class SessionController
     {
-        internal List<Session> GetData()
+        // To save a database table into a List<> using Microsoft.Data.Sqlite,
+        // how to connect to an SQLite database, execute a query, and store the results in a List<Sessions>
+        internal List<Sessions> GetData(SqliteConnection connection)
         {
-            List<Session> codeSessions = new List<Session>();
+            List<Sessions> codeSessions = new List<Sessions>();
 
-            // var codeSessions = new List<Session>();
-
-            string connectionString = "Data Source=codesessions.db";
-
-            using (var connection = new SqliteConnection(connectionString))
+            using (var tableCmd = connection.CreateCommand())
             {
-                connection.Open();
-
-                string query =
+                // execute a query
+                tableCmd.CommandText =
                 @"
                     SELECT *
                     FROM sessions;
                 ";
 
-                using (var command = new SqliteCommand(query, connection))
-                using (var reader = command.ExecuteReader())
+                using (SqliteDataReader reader = tableCmd.ExecuteReader())
                 {
                     if (reader.HasRows)
                     {
+
+                        Console.WriteLine("\nCurrent Coding Sessions FROM GETDATA:");
+                        // Create a table
+                        var table = new Table();
+                        table.AddColumn("[red]ID[/]");
+                        table.AddColumn("[red]Date[/]");
+                        table.AddColumn("[red]Start[/]");
+                        table.AddColumn("[red]End[/]");
+                        table.AddColumn("[red]Duration[/]");
+
                         while (reader.Read())
                         {
-                            var item = new Session
-                            {
-                                id = reader.GetInt32(0),
-                                date = reader.GetString(0),
-                                startTime = reader.GetString(0),
-                                endTime = reader.GetString(0),
-                                duration = reader.GetString(0)
-                            };
+                            // and store the results in a List<Sessions> codeSessions
+                            codeSessions.Add(
+                                new Sessions
+                                {
+                                    id = reader.GetInt32(0),
+                                    date = reader["date"].ToString(),
+                                    startTime = reader["startTime"].ToString(),
+                                    endTime = reader["endTime"].ToString(),
+                                    duration = reader["duration"].ToString()
+                                });
 
-                            codeSessions.Add(item);
-
-                            Console.Write($"{reader["id"]}\t");
-                            Console.Write($"{reader["date"]}\t");
-                            Console.Write($"{reader["startTime"]}\t");
-                            Console.Write($"{reader["endTime"]}\t");
-                            Console.Write($"{reader["duration"]}\t");
-                            Console.WriteLine();
+                            table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
                         }
+                        // AnsiConsole.Write(table);
+
+                        foreach (var session in codeSessions)
+                        {
+                            Console.WriteLine(session.id);
+                            Console.WriteLine(session.date);
+                            Console.WriteLine(session.startTime);
+                            Console.WriteLine(session.endTime);
+                            Console.WriteLine(session.duration);
+                        }
+
+                        Console.WriteLine(codeSessions.Count());
+                        Console.WriteLine(codeSessions.GetType());
+                        // Console.WriteLine(codeSessions.ToString());
+
                     }
                     else
                     {
@@ -57,20 +73,20 @@ namespace code_tracker
                     }
                 }
             }
-            Shooow(codeSessions);
+            // Shooow(codeSessions);
+
             return codeSessions;
         }
 
-        internal void Shooow<Session>(List<Session> codeSessions)
-        {
-            foreach (var code in codeSessions)
-            {
-                Console.WriteLine();
-                Console.WriteLine(code);
-                // Console.WriteLine(code?.ToString());
-                Console.WriteLine();
-            }
-        }
+        // internal void Shooow<Sessions>(List<Sessions> codeSessions)
+        // {
+        //     foreach (var code in codeSessions)
+        //     {
+        //         Console.WriteLine();
+        //         Console.WriteLine(code);
+        //         Console.WriteLine();
+        //     }
+        // }
         internal void DisplayTable(SqliteConnection connection)
         {
             var displayTableCommand = connection.CreateCommand();
@@ -182,6 +198,9 @@ namespace code_tracker
         }
         internal void CalculateSessionTime(SqliteConnection connection)
         {
+
+            List<Sessions> calculateSessionsTable = new List<Sessions>();
+
             var dayToCalculate = DateTime.Now;
 
             string today = dayToCalculate.ToString("dd-MM-yyyy");
@@ -198,12 +217,11 @@ namespace code_tracker
                     MIN(startTime) As MinStartTime,
                     duration
                     FROM sessions
-                    WHERE date='30-09-2024'
+                    WHERE date='02-10-2024'
                    ;
                 ";
                 using (var reader = calculateCommand.ExecuteReader())
                 {
-
                     var table = new Table();
                     table.AddColumn("[red]Date[/]");
                     table.AddColumn("[red]Start[/]");
@@ -214,13 +232,13 @@ namespace code_tracker
                     {
                         var endTime = reader["MaxStartTime"];
 
-                        string formattedEndHour = endTime.ToString();
+                        string? formattedEndHour = endTime.ToString();
 
                         DateTime theEndOfSession = DateTime.Parse(formattedEndHour);
 
                         var startTime = reader["MinStartTime"];
 
-                        string formattedStartHour = startTime.ToString();
+                        string? formattedStartHour = startTime.ToString();
 
                         DateTime theStartOfSession = DateTime.Parse(formattedStartHour);
 
@@ -229,9 +247,32 @@ namespace code_tracker
                         Console.WriteLine(difference.TotalHours);
                         Console.WriteLine(difference.TotalMinutes);
 
+                        string? formattedDifference = difference.ToString();
+
                         table.AddRow($"{reader["date"]}", $"{reader["MinStartTime"]}", $"{reader["MaxStartTime"]}", $"{difference}");
+
+                        var duration = formattedDifference;
+                        Console.WriteLine(formattedDifference);
+
+                        // and store the results in a List<Sessions> codeSessions
+                        calculateSessionsTable.Add(
+                            new Sessions
+                            {
+                                date = reader["date"].ToString(),
+                                startTime = reader["MinStartTime"].ToString(),
+                                endTime = reader["MaxStartTime"].ToString(),
+                                duration = formattedDifference,
+                            });
                     }
                     AnsiConsole.Write(table);
+
+                    foreach (var session in calculateSessionsTable)
+                    {
+                        Console.WriteLine(session.date);
+                        Console.WriteLine(session.startTime);
+                        Console.WriteLine(session.endTime);
+                        Console.WriteLine(session.duration);
+                    }
                 }
             }
             catch (SqliteException message)
