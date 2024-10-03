@@ -79,6 +79,10 @@ namespace code_tracker
                             break;
 
                         case "5": // update session
+
+                            SessionController showDapperList = new();
+                            showDapperList.GetResultsFromDB(connection);
+
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 

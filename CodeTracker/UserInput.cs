@@ -79,6 +79,7 @@ namespace code_tracker
                         "2. To create new session, type 2",
                         "3. To calculate today's session duration, type 3",
                         "4. To Display->ShowTable from stored List<model class>, type 4",
+                        "5. To Display->ShowTable from DAPPER, type 5",
                         "6. To delete one session by ID, type 6",
                         "0. To exit the program, type 0",
                     }));

@@ -2,6 +2,8 @@
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
 
+using Dapper;
+
 namespace code_tracker
 {
     internal class SessionController
@@ -182,7 +184,7 @@ namespace code_tracker
                     MIN(startTime) As MinStartTime,
                     duration
                     FROM sessions
-                    WHERE date='02-10-2024'
+                    WHERE date='03-10-2024'
                    ;
                 ";
                 using (var reader = calculateCommand.ExecuteReader())
@@ -258,5 +260,25 @@ namespace code_tracker
 
             return calculateSessionsTable;
         }
+
+
+
+
+        internal List<Sessions> GetResultsFromDB(SqliteConnection connection)
+        {
+            List<Sessions> dapperSession = new List<Sessions>();
+
+            var sql = @"SELECT * FROM sessions;";
+
+            dapperSession = connection.Query<Sessions>(sql).ToList();
+
+            Console.WriteLine("\n\ndapper session.\n\n");
+
+            DisplayTable showResults = new();
+            showResults.ShowTable(dapperSession);
+
+            return dapperSession;
+        }
+
     }
 }
