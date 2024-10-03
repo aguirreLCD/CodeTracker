@@ -17,7 +17,6 @@ namespace code_tracker
 
             return name;
         }
-
         public static int AskRange()
         {
             Console.Clear();
@@ -36,7 +35,6 @@ namespace code_tracker
                         };
                     }));
         }
-
         public static string AskUserName()
         {
             var userName = AnsiConsole.Prompt(
@@ -110,20 +108,8 @@ namespace code_tracker
 
             string extracted = choice.Substring(0, 1);
 
-            // Console.WriteLine(extracted);
-            // Console.WriteLine(choice[0]);
-            // Console.WriteLine(choices[0]);
-
             return extracted;
         }
     }
 }
 
-
-// Console.WriteLine("1. To display all current table in database, type: 1");
-// Console.WriteLine("2. To create new session, type: 2");
-// Console.WriteLine("3. To search specific code session, type: 3");
-// Console.WriteLine("4. To search code sessions by date, type: 4");
-// Console.WriteLine("5. To update a code session, type: 5");
-// Console.WriteLine("6. To delete a code session by ID, type: 6");
-// Console.WriteLine("7. To delete all code sessions, type: 7");

@@ -3,6 +3,7 @@ using Microsoft.Data.Sqlite;
 using Spectre.Console;
 
 using Dapper;
+using System.Data;
 
 namespace code_tracker
 {
@@ -35,28 +36,72 @@ namespace code_tracker
             return coding;
         }
 
-
-
-        internal List<Sessions> ShowSessionTime(SqliteConnection connection)
+        internal List<Sessions> CalculateTodaySessionDuration(SqliteConnection connection)
         {
-            Console.WriteLine("Coding Session Duration:");
+            Console.WriteLine("\nToday's Coding Session Duration:");
 
+            var currentDate = DateTime.Now;
 
-            var sql = @"SELECT * FROM sessions WHERE date = @date;";
+            string formattedDay = currentDate.ToString("dd-MM-yyyy");
 
-            // Use the Query method to execute the query and return a list of objects    
-            List<Sessions> coding = connection.Query<Sessions>(sql, new { date = "03-10-2024" }).ToList();
+            var sql = @"SELECT date, MAX(startTime) As MaxStartTime, MIN(startTime) As MinStartTime, duration FROM sessions WHERE date=@date;";
 
-            Console.WriteLine("\ndapper: print table\n");
+            List<Sessions> codingSessionDuration = new List<Sessions>();
+
+            var reader = connection.ExecuteReader(sql, new { date = formattedDay });
+
+            // DataTable codingSessionDurationS = new DataTable();
+            // codingSessionDurationS.Load(reader);
+
+            while (reader.Read())
+            {
+                var endTime = reader["MaxStartTime"];
+                // Console.WriteLine(endTime);
+
+                string? formattedEndHour = endTime.ToString();
+                // Console.WriteLine(formattedEndHour);
+
+                DateTime theEndOfSession = DateTime.Parse(formattedEndHour);
+                // Console.WriteLine(theEndOfSession);
+
+                var startTime = reader["MinStartTime"];
+                // Console.WriteLine(startTime);
+
+                string? formattedStartHour = startTime.ToString();
+                // Console.WriteLine(formattedStartHour);
+
+                DateTime theStartOfSession = DateTime.Parse(formattedStartHour);
+                // Console.WriteLine(theStartOfSession);
+
+                TimeSpan difference = theEndOfSession - theStartOfSession;
+                // Console.WriteLine(difference);
+
+                string? formattedDifference = difference.ToString();
+                // Console.WriteLine(formattedDifference);
+
+                // var duration = formattedDifference;
+                codingSessionDuration.Add(
+                    new Sessions
+                    {
+                        date = reader["date"].ToString(),
+                        startTime = reader["MinStartTime"].ToString(),
+                        endTime = reader["MaxStartTime"].ToString(),
+                        duration = formattedDifference,
+                    });
+            }
+
+            // // Use the Query method to execute the query and return a list of objects    
+            // // codingSessionDuration = connection.Query<Sessions>(sql, new { date = formattedDay }).ToList();
+
+            // Console.WriteLine("\ndapper: session time table\n");
             DisplayTable showResults = new();
-            showResults.ShowTodayTable(coding);
+            showResults.ShowSessionDurationTable(codingSessionDuration);
 
-            return coding;
+            return codingSessionDuration;
         }
 
         internal List<Sessions> DapperInsert(SqliteConnection connection)
         {
-
             var currentDate = DateTime.Now;
 
             string formattedDay = currentDate.ToString("dd-MM-yyyy");
@@ -113,111 +158,6 @@ namespace code_tracker
                 throw;
             }
         }
-
-        // TODO:
-        // use today WHERE date='02-10-2024';
-        // check for null references on formatted hours;
-        internal List<Sessions> CalculateSessionTime(SqliteConnection connection)
-        {
-            List<Sessions> calculateSessionsTable = new List<Sessions>();
-
-            var dayToCalculate = DateTime.Now;
-
-            string today = dayToCalculate.ToString("dd-MM-yyyy");
-
-            var calculateCommand = connection.CreateCommand();
-
-            try
-            {
-                calculateCommand.CommandText =
-                @"
-                   SELECT 
-                    date,
-                    MAX(startTime) As MaxStartTime,
-                    MIN(startTime) As MinStartTime,
-                    duration
-                    FROM sessions
-                    WHERE date='03-10-2024'
-                   ;
-                ";
-                using (var reader = calculateCommand.ExecuteReader())
-                {
-                    // var table = new Table();
-                    // table.AddColumn("[red]Date[/]");
-                    // table.AddColumn("[red]Start[/]");
-                    // table.AddColumn("[red]End[/]");
-                    // table.AddColumn("[red]Duration[/]");
-
-                    while (reader.Read())
-                    {
-                        if (reader.HasRows)
-                        {
-                            var endTime = reader["MaxStartTime"];
-
-                            string? formattedEndHour = endTime.ToString();
-
-                            DateTime theEndOfSession = DateTime.Parse(formattedEndHour);
-
-                            var startTime = reader["MinStartTime"];
-
-                            string? formattedStartHour = startTime.ToString();
-
-                            DateTime theStartOfSession = DateTime.Parse(formattedStartHour);
-
-                            TimeSpan difference = theEndOfSession - theStartOfSession;
-                            // Console.WriteLine(difference);
-                            // Console.WriteLine(difference.TotalHours);
-                            // Console.WriteLine(difference.TotalMinutes);
-
-                            string? formattedDifference = difference.ToString();
-
-                            // table.AddRow($"{reader["date"]}", $"{reader["MinStartTime"]}", $"{reader["MaxStartTime"]}", $"{difference}");
-
-                            var duration = formattedDifference;
-                            // Console.WriteLine(formattedDifference);
-
-                            // and store the results in a List<Sessions> codeSessions
-                            calculateSessionsTable.Add(
-                                new Sessions
-                                {
-                                    date = reader["date"].ToString(),
-                                    startTime = reader["MinStartTime"].ToString(),
-                                    endTime = reader["MaxStartTime"].ToString(),
-                                    duration = formattedDifference,
-                                });
-                        }
-                    }
-                    // AnsiConsole.Write(table);
-
-                    // foreach (var session in calculateSessionsTable)
-                    // {
-                    //     Console.WriteLine(session.date);
-                    //     Console.WriteLine(session.startTime);
-                    //     Console.WriteLine(session.endTime);
-                    //     Console.WriteLine(session.duration);
-                    // }
-                }
-            }
-            catch (SqliteException message)
-            {
-                Console.WriteLine(message.Message);
-                Console.WriteLine(message.ErrorCode);
-                throw;
-            }
-
-            Console.WriteLine("\nToday's Coding Session Duration:");
-
-            // call to ShowTable Method from DisplayTable class
-            DisplayTable showResults = new();
-            showResults.ShowDurationTable(calculateSessionsTable);
-
-            return calculateSessionsTable;
-        }
-
-
-
-
-
 
     }
 }

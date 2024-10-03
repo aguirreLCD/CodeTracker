@@ -60,29 +60,22 @@ namespace code_tracker
                             break;
 
                         case "2"://  create session
-                                 // SessionController createNewSession = new();
-                                 // createNewSession.CreateRecord(connection);
-
                             SessionController insertSession = new();
                             insertSession.DapperInsert(connection);
 
-
                             break;
 
-                        case "3": // calculate session duration
+                        case "3": // calculate today's  session duration
                             SessionController calculateSession = new();
-                            calculateSession.CalculateSessionTime(connection);
+                            calculateSession.CalculateTodaySessionDuration(connection);
 
                             break;
 
                         case "4": // 
-
-
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
-                        case "5": // DAPPER
-
+                        case "5": // show DAPPER data
                             SessionController showDapperList = new();
                             showDapperList.GetDataFromDB(connection);
 

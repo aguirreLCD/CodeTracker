@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using Spectre.Console;
 
 namespace code_tracker
 {
     internal class DisplayTable
     {
-        // Access the List in Other Methods
         internal void ShowTodayTable(List<Sessions> coding)
         {
             // Create a table from Spectre Console:
@@ -22,7 +20,6 @@ namespace code_tracker
             Console.WriteLine("\nToday's Coding Sessions:");
             AnsiConsole.Write(table);
         }
-
 
         internal void ShowDurationTable(List<Sessions> calculateSessionsTable)
         {
@@ -41,7 +38,6 @@ namespace code_tracker
             AnsiConsole.Write(table);
         }
 
-
         internal void ShowTable(List<Sessions> dapperSession)
         {
             var table = new Table();
@@ -58,8 +54,6 @@ namespace code_tracker
             AnsiConsole.Write(table);
         }
 
-
-
         internal void ShowInsertTable(List<Sessions> insertedSessions)
         {
             var table = new Table();
@@ -75,11 +69,23 @@ namespace code_tracker
             // Console.WriteLine("");
             AnsiConsole.Write(table);
         }
+
+        internal void ShowSessionDurationTable(List<Sessions> codingSessionDuration)
+        {
+            var table = new Table();
+            table.AddColumn("[red]Date[/]");
+            table.AddColumn("[red]Start[/]");
+            table.AddColumn("[red]End[/]");
+            table.AddColumn("[red]Duration[/]");
+
+            foreach (var session in codingSessionDuration)
+            {
+                table.AddRow($"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
+            }
+            // Display the List
+            // Console.WriteLine("\nShowDurationTable:");
+            AnsiConsole.Write(table);
+        }
     }
 }
 
-// static void Main()
-// {
-//     List<string> results = GetResultsFromDatabase();
-//     DisplayList(results);
-// }
