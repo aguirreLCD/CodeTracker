@@ -79,6 +79,9 @@ namespace code_tracker
                             break;
 
                         case "5": // update session
+                            SessionController getData = new();
+                            getData.GetDataFromDB(connection);
+
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 

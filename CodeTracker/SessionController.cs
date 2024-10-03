@@ -258,5 +258,66 @@ namespace code_tracker
 
             return calculateSessionsTable;
         }
+
+
+        // Here is a standard ADO.NET C# code for retrieving data from a database and materializing it as a collection of Sessions objects:
+        internal List<Sessions> GetDataFromDB(SqliteConnection connection)
+        {
+            List<Sessions> sessionsTable = new List<Sessions>();
+
+            using (var tableCmd = connection.CreateCommand())
+            {
+                // execute a query
+                tableCmd.CommandText =
+                @"
+                    SELECT *
+                    FROM sessions;
+                ";
+                //  read table into a List
+                using (SqliteDataReader reader = tableCmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            // store the results in a List<Sessions> sessionsTable
+                            var session = new Sessions
+                            {
+                                id = reader.GetInt32(0),
+                                date = reader["date"].ToString(),
+                                startTime = reader["startTime"].ToString(),
+                                endTime = reader["endTime"].ToString(),
+                                duration = reader["duration"].ToString()
+                            };
+                            sessionsTable.Add(session);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n\nNo rows found.\n\n");
+                    }
+                }
+            }
+            // call to ShowTable Method from DisplayTable class
+            Console.WriteLine("\n\nGetDataFromDB.\n\n");
+
+            DisplayTable showResults = new();
+            showResults.ShowTable(sessionsTable);
+
+            return sessionsTable;
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

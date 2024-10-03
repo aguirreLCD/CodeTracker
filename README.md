@@ -106,7 +106,7 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 
   `dotnet add package Spectre.Console.Cli`
 
-- [] Create a git branch:  
+- [x] Create a git branch:  
 - [] Install Dapper (micro) ORM: Object Relational Mapping library:    
   `dotnet add package Dapper`
 
