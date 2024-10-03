@@ -64,7 +64,6 @@ namespace code_tracker
 
         public static string AskUserInput()
         {
-
             var choices = AnsiConsole.Prompt(
                 new MultiSelectionPrompt<string>()
                     .PageSize(10)
@@ -76,9 +75,10 @@ namespace code_tracker
                         "1. To show Today's sessions, type 1",
                         "2. To create new session, type 2",
                         "3. To calculate today's session duration, type 3",
-                        "4. To Display->ShowTable from stored List<model class>, type 4",
+                        "4. To show sessions by date, type 4",
                         "5. To Display->ShowTable from DAPPER, type 5",
                         "6. To delete one session by ID, type 6",
+                        "7. To calculate session duration by inputed date, type 7",
                         "0. To exit the program, type 0",
                     }));
             // .AddChoices(new[]

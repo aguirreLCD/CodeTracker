@@ -72,6 +72,9 @@ namespace code_tracker
                             break;
 
                         case "4": // 
+                            SessionController showSessionsDay = new();
+                            showSessionsDay.ShowSessionsByDate(connection, "01-10-2024");
+
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
@@ -88,7 +91,10 @@ namespace code_tracker
 
                             break;
 
-                        case "7": // delete all database 
+                        case "7": // CalculateSessionDuration
+                            SessionController sessionDuration = new();
+                            sessionDuration.CalculateSessionDuration(connection, "02-10-2024");
+
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 

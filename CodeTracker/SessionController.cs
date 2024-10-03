@@ -159,5 +159,82 @@ namespace code_tracker
             }
         }
 
+
+        internal List<Sessions> ShowSessionsByDate(SqliteConnection connection, string userInputDate)
+        {
+            // ADD validation for userInputDate
+
+            var sql = @"SELECT * FROM sessions WHERE date = @date;";
+
+            // Use the Query method to execute the query and return a list of objects    
+            List<Sessions> coding = connection.Query<Sessions>(sql, new { date = userInputDate }).ToList();
+
+            DisplayTable showResults = new();
+            showResults.ShowTodayTable(coding);
+
+            return coding;
+        }
+
+
+
+        internal List<Sessions> CalculateSessionDuration(SqliteConnection connection, string userInputDate)
+        {
+            Console.WriteLine($"\n{userInputDate} Coding Session Duration:");
+
+            var sql = @"SELECT date, MAX(startTime) As MaxStartTime, MIN(startTime) As MinStartTime, duration FROM sessions WHERE date=@date;";
+
+            List<Sessions> codingSessionDuration = new List<Sessions>();
+
+            var reader = connection.ExecuteReader(sql, new { date = userInputDate });
+
+
+            while (reader.Read())
+            {
+                var endTime = reader["MaxStartTime"];
+                // Console.WriteLine(endTime);
+
+                string? formattedEndHour = endTime.ToString();
+                // Console.WriteLine(formattedEndHour);
+
+                DateTime theEndOfSession = DateTime.Parse(formattedEndHour);
+                // Console.WriteLine(theEndOfSession);
+
+                var startTime = reader["MinStartTime"];
+                // Console.WriteLine(startTime);
+
+                string? formattedStartHour = startTime.ToString();
+                // Console.WriteLine(formattedStartHour);
+
+                DateTime theStartOfSession = DateTime.Parse(formattedStartHour);
+                // Console.WriteLine(theStartOfSession);
+
+                TimeSpan difference = theEndOfSession - theStartOfSession;
+                // Console.WriteLine(difference);
+
+                string? formattedDifference = difference.ToString();
+                // Console.WriteLine(formattedDifference);
+
+                // var duration = formattedDifference;
+                codingSessionDuration.Add(
+                    new Sessions
+                    {
+                        date = reader["date"].ToString(),
+                        startTime = reader["MinStartTime"].ToString(),
+                        endTime = reader["MaxStartTime"].ToString(),
+                        duration = formattedDifference,
+                    });
+            }
+
+            // // Use the Query method to execute the query and return a list of objects    
+            // // codingSessionDuration = connection.Query<Sessions>(sql, new { date = formattedDay }).ToList();
+
+            // Console.WriteLine("\ndapper: session time table\n");
+            DisplayTable showResults = new();
+            showResults.ShowSessionDurationTable(codingSessionDuration);
+
+            return codingSessionDuration;
+        }
+
+
     }
 }
