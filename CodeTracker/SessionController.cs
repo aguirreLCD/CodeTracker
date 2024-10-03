@@ -53,6 +53,7 @@ namespace code_tracker
             // DataTable codingSessionDurationS = new DataTable();
             // codingSessionDurationS.Load(reader);
 
+            var durationTotal = "";
             while (reader.Read())
             {
                 var endTime = reader["MaxStartTime"];
@@ -79,7 +80,8 @@ namespace code_tracker
                 string? formattedDifference = difference.ToString();
                 // Console.WriteLine(formattedDifference);
 
-                // var duration = formattedDifference;
+                durationTotal = formattedDifference;
+
                 codingSessionDuration.Add(
                     new Sessions
                     {
@@ -89,13 +91,28 @@ namespace code_tracker
                         duration = formattedDifference,
                     });
             }
+            // Console.WriteLine(durationTotal);
 
-            // // Use the Query method to execute the query and return a list of objects    
-            // // codingSessionDuration = connection.Query<Sessions>(sql, new { date = formattedDay }).ToList();
+            var sqlDuration = $"UPDATE sessions SET duration=@duration WHERE date=@date";
 
-            // Console.WriteLine("\ndapper: session time table\n");
+            // 3. we will pass parameters values by providing the customer entity
+            var session = new Sessions() { date = formattedDay, duration = durationTotal };
+
+            var rowsAffected = connection.Execute(sqlDuration, session);
+
+            Console.WriteLine($"{rowsAffected} row(s) inserted.");
+
+            var sqlCalculated = @"SELECT * FROM sessions WHERE date=@date";
+
+            List<Sessions> calculatedSessions = connection.Query<Sessions>(sqlCalculated, new { date = formattedDay }).ToList();
+
             DisplayTable showResults = new();
             showResults.ShowSessionDurationTable(codingSessionDuration);
+
+            Console.WriteLine("\ncalculatedSessions List:");
+
+            DisplayTable showDuration = new();
+            showDuration.ShowSessionDurationTable(calculatedSessions);
 
             return codingSessionDuration;
         }
@@ -109,14 +126,15 @@ namespace code_tracker
             string startHour = currentDate.ToString("HH:mm");
 
             // 2. We will create an `INSERT` sql statement
-            var sql = $"INSERT INTO sessions(date, startTime) VALUES(@date, @startTime)";
+            var sql = $"INSERT INTO sessions(date, startTime, endTime) VALUES(@date, @startTime, @endTime)";
 
-            {
-                // 3. we will pass parameters values by providing the customer entity
-                var session = new Sessions() { date = formattedDay, startTime = startHour };
-                var rowsAffected = connection.Execute(sql, session);
-                Console.WriteLine($"{rowsAffected} row(s) inserted.");
-            }
+            // 3. we will pass parameters values by providing the customer entity
+            var session = new Sessions() { date = formattedDay, startTime = startHour, endTime = startHour };
+
+            var rowsAffected = connection.Execute(sql, session);
+
+            Console.WriteLine($"{rowsAffected} row(s) inserted.");
+
             List<Sessions> insertedSessions = connection.Query<Sessions>("SELECT * FROM sessions").ToList();
 
             Console.WriteLine("\ndapper: insert table\n");
@@ -223,13 +241,6 @@ namespace code_tracker
             Console.WriteLine($"Affected Rows: {affectedRows}");
 
         }
-
-
-
-
-
-
-
 
     }
 }

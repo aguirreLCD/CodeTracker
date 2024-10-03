@@ -12,10 +12,11 @@ namespace code_tracker
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
             table.AddColumn("[red]End[/]");
+            table.AddColumn("[red]Duration[/]");
 
             foreach (var session in coding)
             {
-                table.AddRow($"{session.date}", $"{session.startTime}", $"{session.endTime}");
+                table.AddRow($"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
             }
             // Display table from Spectre Console:
             Console.WriteLine("\nToday's Coding Sessions:");
@@ -46,10 +47,11 @@ namespace code_tracker
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
             table.AddColumn("[red]End[/]");
+            table.AddColumn("[red]Duration[/]");
 
             foreach (var session in dapperSession)
             {
-                table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}", $"{session.endTime}");
+                table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
             }
             // Display the List
             // Console.WriteLine("");
