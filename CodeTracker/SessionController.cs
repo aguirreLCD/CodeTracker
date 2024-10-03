@@ -9,10 +9,11 @@ namespace code_tracker
 {
     internal class SessionController
     {
-
         DisplayTable showResults = new();
         List<Sessions> dataFromDB = new List<Sessions>();
         string? durationTotal = "";
+
+
 
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
@@ -235,5 +236,41 @@ namespace code_tracker
 
             return dataFromDB;
         }
+
+
+        internal List<Sessions> CalculateDuration(SqliteConnection connection, string userInputDate)
+        {
+            // var currentDate = DateTime.Now;
+
+            // string formattedDay = currentDate.ToString("dd-MM-yyyy");
+
+            var sql = @"SELECT date, MAX(startTime) As MaxStartTime, MIN(startTime) As MinStartTime, duration FROM sessions WHERE date=@date;";
+
+            List<Sessions> codingSessionDuration = new List<Sessions>();
+
+            var sessions = connection.Query(sql, new { date = userInputDate });
+
+            foreach (var sessiondata in sessions)
+            {
+
+                Console.WriteLine($"{sessiondata.date} {sessiondata.MaxStartTime} {sessiondata.MinStartTime} = {sessiondata.duration}");
+
+                codingSessionDuration.Add(
+                                    new Sessions
+                                    {
+                                        date = sessiondata.date.ToString(),
+                                        startTime = sessiondata.MinStartTime.ToString(),
+                                        endTime = sessiondata.MaxStartTime.ToString(),
+                                        duration = sessiondata.duration.ToString(),
+                                    });
+
+            }
+
+            showResults.ShowTable(codingSessionDuration);
+
+            return codingSessionDuration;
+
+        }
+
     }
 }

@@ -80,6 +80,7 @@ namespace code_tracker
                         "6. To delete one session by ID, type 6",
                         "7. To calculate session duration by date, type 7",
                         "8. To update session, type 8",
+                        "9. To calculate , type 9",
                         "0. To exit the program, type 0",
                     }));
             // .AddChoices(new[]

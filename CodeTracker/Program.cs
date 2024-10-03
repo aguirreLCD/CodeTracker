@@ -97,6 +97,13 @@ namespace code_tracker
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
+                        case "9": // Update Record
+                            SessionController calculate = new();
+                            calculate.CalculateDuration(connection, "02-10-2024");
+
+                            Console.WriteLine("\n\rPress the Enter key to continue.");
+                            break;
+
                         default:
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
