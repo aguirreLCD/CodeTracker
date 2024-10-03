@@ -147,6 +147,7 @@ namespace code_tracker
 
             var reader = connection.ExecuteReader(sql, new { date = userInputDate });
 
+            var durationSession = "";
             while (reader.Read())
             {
                 var endTime = reader["MaxStartTime"];
@@ -173,7 +174,8 @@ namespace code_tracker
                 string? formattedDifference = difference.ToString();
                 // Console.WriteLine(formattedDifference);
 
-                // var duration = formattedDifference;
+                durationSession = formattedDifference;
+
                 codingSessionDuration.Add(
                     new Sessions
                     {
@@ -183,11 +185,19 @@ namespace code_tracker
                         duration = formattedDifference,
                     });
             }
+            Console.WriteLine(durationSession);
 
-            // // Use the Query method to execute the query and return a list of objects    
-            // // codingSessionDuration = connection.Query<Sessions>(sql, new { date = formattedDay }).ToList();
+            var sqlDuration = $"UPDATE sessions SET duration=@duration WHERE date=@date";
+            var session = new Sessions() { date = userInputDate, duration = durationSession };
+            var rowsAffected = connection.Execute(sqlDuration, session);
+            Console.WriteLine($"{rowsAffected} row(s) inserted.");
+
+            var sqlCalculated = @"SELECT * FROM sessions WHERE date=@date";
+            dataFromDB = connection.Query<Sessions>(sqlCalculated, new { date = userInputDate }).ToList();
 
             showResults.ShowTable(codingSessionDuration);
+
+            showResults.ShowTable(dataFromDB);
 
             return codingSessionDuration;
         }
@@ -205,23 +215,20 @@ namespace code_tracker
 
         }
 
-
-
         internal List<Sessions> UpdateRecord(SqliteConnection connection)
         {
-
-            Console.WriteLine(durationTotal);
-
             var date = AnsiConsole.Prompt(new TextPrompt<string>("What session you want to update? type formatted date: 01-10-2024")
             .PromptStyle("red"));
 
             var sqlUpdate = @"UPDATE sessions SET duration=@duration WHERE date=@date;";
 
             var session = new Sessions() { date = date, duration = durationTotal };
+
             var rowsAffected = connection.Execute(sqlUpdate, session);
+
             Console.WriteLine($"{rowsAffected} row(s) affected.");
 
-            var sqlSelect = @"SELECT * FROM sessions";
+            var sqlSelect = @"SELECT * FROM sessions;";
             dataFromDB = connection.Query<Sessions>(sqlSelect).ToList();
 
             showResults.ShowTable(dataFromDB);
