@@ -8,10 +8,8 @@ namespace code_tracker
 {
     internal class SessionController
     {
-
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
-
             var sql = @"SELECT * FROM sessions;";
 
             List<Sessions> dapperSession = connection.Query<Sessions>(sql).ToList();
@@ -23,7 +21,6 @@ namespace code_tracker
             return dapperSession;
         }
 
-        // connect to an SQLite database, execute a query, create a table from Spectre Console, display table from Spectre Console:
         internal List<Sessions> PrintTodayTable(SqliteConnection connection)
         {
             var sql = @"SELECT * FROM sessions WHERE date = @date;";
@@ -38,40 +35,52 @@ namespace code_tracker
             return coding;
         }
 
-        internal void CreateRecord(SqliteConnection connection)
+
+
+        internal List<Sessions> ShowSessionTime(SqliteConnection connection)
         {
+            Console.WriteLine("Coding Session Duration:");
+
+
+            var sql = @"SELECT * FROM sessions WHERE date = @date;";
+
+            // Use the Query method to execute the query and return a list of objects    
+            List<Sessions> coding = connection.Query<Sessions>(sql, new { date = "03-10-2024" }).ToList();
+
+            Console.WriteLine("\ndapper: print table\n");
+            DisplayTable showResults = new();
+            showResults.ShowTodayTable(coding);
+
+            return coding;
+        }
+
+        internal List<Sessions> DapperInsert(SqliteConnection connection)
+        {
+
             var currentDate = DateTime.Now;
 
             string formattedDay = currentDate.ToString("dd-MM-yyyy");
 
             string startHour = currentDate.ToString("HH:mm");
 
-            var endHour = currentDate.AddHours(2);
+            // 2. We will create an `INSERT` sql statement
+            var sql = $"INSERT INTO sessions(date, startTime) VALUES(@date, @startTime)";
 
-            string formattedEndHour = endHour.ToString("HH:mm");
-
-            TimeSpan difference = endHour - currentDate;
-
-            string formattedDurationHours = difference.TotalHours.ToString();
-
-            string formattedDurationMinutes = difference.TotalMinutes.ToString();
-
-            using (var insertTransaction = connection.BeginTransaction())
             {
-                var insertCommand = connection.CreateCommand();
-
-                insertCommand.CommandText =
-                insertCommand.CommandText =
-                $"INSERT INTO sessions(date, startTime) VALUES('{formattedDay}', '{startHour}')";
-
-                insertCommand.ExecuteNonQuery();
-                insertTransaction.Commit();
-
-                Console.WriteLine();
-                Console.WriteLine($"Session: {formattedDay}\t{startHour}\t inserted.");
-                Console.WriteLine();
+                // 3. we will pass parameters values by providing the customer entity
+                var session = new Sessions() { date = formattedDay, startTime = startHour };
+                var rowsAffected = connection.Execute(sql, session);
+                Console.WriteLine($"{rowsAffected} row(s) inserted.");
             }
+            List<Sessions> insertedSessions = connection.Query<Sessions>("SELECT * FROM sessions").ToList();
+
+            Console.WriteLine("\ndapper: insert table\n");
+            DisplayTable showResults = new();
+            showResults.ShowTodayTable(insertedSessions);
+
+            return insertedSessions;
         }
+
         internal void DeleteRecord(SqliteConnection connection)
         {
             try

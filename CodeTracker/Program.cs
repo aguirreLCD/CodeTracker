@@ -60,8 +60,12 @@ namespace code_tracker
                             break;
 
                         case "2"://  create session
-                            SessionController createNewSession = new();
-                            createNewSession.CreateRecord(connection);
+                                 // SessionController createNewSession = new();
+                                 // createNewSession.CreateRecord(connection);
+
+                            SessionController insertSession = new();
+                            insertSession.DapperInsert(connection);
+
 
                             break;
 

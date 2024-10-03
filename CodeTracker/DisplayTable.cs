@@ -48,12 +48,28 @@ namespace code_tracker
             table.AddColumn("[red]ID[/]");
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
-            table.AddColumn("[red]End[/]");
-            table.AddColumn("[red]Duration[/]");
 
             foreach (var session in dapperSession)
             {
                 table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}");
+            }
+            // Display the List
+            // Console.WriteLine("");
+            AnsiConsole.Write(table);
+        }
+
+
+
+        internal void ShowInsertTable(List<Sessions> insertedSessions)
+        {
+            var table = new Table();
+
+            table.AddColumn("[red]Date[/]");
+            table.AddColumn("[red]Start[/]");
+
+            foreach (var session in insertedSessions)
+            {
+                table.AddRow($"{session.date}", $"{session.startTime}");
             }
             // Display the List
             // Console.WriteLine("");
