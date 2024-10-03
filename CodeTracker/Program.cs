@@ -7,10 +7,6 @@ namespace code_tracker
     {
         static void Main(string[] args)
         {
-            // var name = UserInput.AskName();
-            // var option = UserInput.AskRange();
-            // var userName = UserInput.AskUserName();
-
             Console.Clear();
 
             string? menuSelection = "";
@@ -23,13 +19,11 @@ namespace code_tracker
                 {
                     menuSelection = choice.ToLower();
                 }
-                // application should only be terminated when the user inserts 0.
                 if (menuSelection == "0")
                 {
                     Console.WriteLine("Exiting program...");
                     return;
                 }
-
                 Console.Clear();
 
                 // create DB, Table, Open connection
@@ -40,7 +34,6 @@ namespace code_tracker
                     try
                     {
                         connection.Open();
-
                         DBManager databaseManager = new();
                         databaseManager.CreateDBTable(connection);
                     }
@@ -72,7 +65,7 @@ namespace code_tracker
 
                         case "4": // 
                             SessionController showSessionsDay = new();
-                            showSessionsDay.ShowSessionsByDate(connection, "27-09-2024");
+                            showSessionsDay.ShowSessionsByDate(connection, "30-09-2024");
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
@@ -92,7 +85,7 @@ namespace code_tracker
 
                         case "7": // CalculateSessionDuration
                             SessionController sessionDuration = new();
-                            sessionDuration.CalculateSessionDuration(connection, "27-09-2024");
+                            sessionDuration.CalculateSessionDuration(connection, "30-09-2024");
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
