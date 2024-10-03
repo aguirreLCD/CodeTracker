@@ -11,10 +11,11 @@ namespace code_tracker
 
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
+            table.AddColumn("[red]End[/]");
 
             foreach (var session in coding)
             {
-                table.AddRow($"{session.date}", $"{session.startTime}");
+                table.AddRow($"{session.date}", $"{session.startTime}", $"{session.endTime}");
             }
             // Display table from Spectre Console:
             Console.WriteLine("\nToday's Coding Sessions:");
@@ -44,10 +45,11 @@ namespace code_tracker
             table.AddColumn("[red]ID[/]");
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
+            table.AddColumn("[red]End[/]");
 
             foreach (var session in dapperSession)
             {
-                table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}");
+                table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}", $"{session.endTime}");
             }
             // Display the List
             // Console.WriteLine("");
@@ -60,10 +62,11 @@ namespace code_tracker
 
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
+            table.AddColumn("[red]End[/]");
 
             foreach (var session in insertedSessions)
             {
-                table.AddRow($"{session.date}", $"{session.startTime}");
+                table.AddRow($"{session.date}", $"{session.startTime}", $"{session.endTime}");
             }
             // Display the List
             // Console.WriteLine("");

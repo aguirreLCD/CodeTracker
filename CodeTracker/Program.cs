@@ -23,7 +23,6 @@ namespace code_tracker
                 {
                     menuSelection = choice.ToLower();
                 }
-
                 // application should only be terminated when the user inserts 0.
                 if (menuSelection == "0")
                 {
@@ -73,7 +72,7 @@ namespace code_tracker
 
                         case "4": // 
                             SessionController showSessionsDay = new();
-                            showSessionsDay.ShowSessionsByDate(connection, "01-10-2024");
+                            showSessionsDay.ShowSessionsByDate(connection, "30-09-2024");
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
@@ -93,7 +92,14 @@ namespace code_tracker
 
                         case "7": // CalculateSessionDuration
                             SessionController sessionDuration = new();
-                            sessionDuration.CalculateSessionDuration(connection, "02-10-2024");
+                            sessionDuration.CalculateSessionDuration(connection, "30-09-2024");
+
+                            Console.WriteLine("\n\rPress the Enter key to continue.");
+                            break;
+
+                        case "8": // Update Record
+                            // SessionController sessionUpdate = new();
+                            // sessionUpdate.UpdateRecord(connection);
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;

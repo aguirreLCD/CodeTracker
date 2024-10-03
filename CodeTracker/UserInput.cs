@@ -78,7 +78,8 @@ namespace code_tracker
                         "4. To show sessions by date, type 4",
                         "5. To Display->ShowTable from DAPPER, type 5",
                         "6. To delete one session by ID, type 6",
-                        "7. To calculate session duration by inputed date, type 7",
+                        "7. To calculate session duration by date, type 7",
+                        "8. To update session, type 8",
                         "0. To exit the program, type 0",
                     }));
             // .AddChoices(new[]

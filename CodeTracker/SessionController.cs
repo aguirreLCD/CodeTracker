@@ -126,40 +126,6 @@ namespace code_tracker
             return insertedSessions;
         }
 
-        internal void DeleteRecord(SqliteConnection connection)
-        {
-            try
-            {
-                var id = AnsiConsole.Prompt(new TextPrompt<int>("What session you want to delete? type id:")
-                .PromptStyle("red"));
-
-                using (var deleteTransaction = connection.BeginTransaction())
-                {
-                    var deleteCommand = connection.CreateCommand();
-
-                    deleteCommand.CommandText =
-                    @"
-                        DELETE FROM sessions
-                        WHERE id = $id;
-                    ";
-
-                    deleteCommand.Parameters.AddWithValue("$id", id);
-                    deleteCommand.ExecuteNonQuery();
-                    deleteTransaction.Commit();
-
-                    Console.WriteLine();
-                    AnsiConsole.MarkupLine("Deleted: [yellow]{0}[/]", id);
-                }
-            }
-            catch (SqliteException message)
-            {
-                Console.WriteLine(message.Message);
-                Console.WriteLine(message.ErrorCode);
-                throw;
-            }
-        }
-
-
         internal List<Sessions> ShowSessionsByDate(SqliteConnection connection, string userInputDate)
         {
             // ADD validation for userInputDate
@@ -175,8 +141,6 @@ namespace code_tracker
             return coding;
         }
 
-
-
         internal List<Sessions> CalculateSessionDuration(SqliteConnection connection, string userInputDate)
         {
             Console.WriteLine($"\n{userInputDate} Coding Session Duration:");
@@ -186,7 +150,6 @@ namespace code_tracker
             List<Sessions> codingSessionDuration = new List<Sessions>();
 
             var reader = connection.ExecuteReader(sql, new { date = userInputDate });
-
 
             while (reader.Read())
             {
@@ -234,6 +197,38 @@ namespace code_tracker
 
             return codingSessionDuration;
         }
+
+        internal void DeleteRecord(SqliteConnection connection)
+        {
+            var id = AnsiConsole.Prompt(new TextPrompt<int>("What session you want to delete? type id:")
+            .PromptStyle("red"));
+
+            var sql = @"DELETE FROM sessions WHERE id = $id;";
+
+            var affectedRows = connection.Execute(sql, new { id });
+
+            Console.WriteLine($"Affected Rows: {affectedRows}");
+
+        }
+
+        internal void UpdateRecord(SqliteConnection connection)
+        {
+            var date = AnsiConsole.Prompt(new TextPrompt<string>("What session you want to update? type formatted date: 01-10-2024")
+            .PromptStyle("red"));
+
+            var sql = @"UPDATE sessions SET endTime = startTime WHERE date=@date;";
+
+            var affectedRows = connection.Execute(sql, new { date });
+
+            Console.WriteLine($"Affected Rows: {affectedRows}");
+
+        }
+
+
+
+
+
+
 
 
     }
