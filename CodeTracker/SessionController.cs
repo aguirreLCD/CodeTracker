@@ -8,92 +8,36 @@ namespace code_tracker
 {
     internal class SessionController
     {
-        // To save a database table into a List<> using Microsoft.Data.Sqlite,
-        // how to connect to an SQLite database, execute a query, and store the results in a List<Sessions>
-        internal List<Sessions> GetResultsFromDatabase(SqliteConnection connection)
+
+        internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
-            List<Sessions> codeSessions = new List<Sessions>();
 
-            using (var tableCmd = connection.CreateCommand())
-            {
-                // execute a query
-                tableCmd.CommandText =
-                @"
-                    SELECT *
-                    FROM sessions;
-                ";
-                //  read table into a List
-                using (SqliteDataReader reader = tableCmd.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            // store the results in a List<Sessions> codeSessions
-                            codeSessions.Add(
-                                new Sessions
-                                {
-                                    id = reader.GetInt32(0),
-                                    date = reader["date"].ToString(),
-                                    startTime = reader["startTime"].ToString(),
-                                    endTime = reader["endTime"].ToString(),
-                                    duration = reader["duration"].ToString()
-                                });
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("\n\nNo rows found.\n\n");
-                    }
-                }
-            }
-            // call to ShowTable Method from DisplayTable class
+            var sql = @"SELECT * FROM sessions;";
+
+            List<Sessions> dapperSession = connection.Query<Sessions>(sql).ToList();
+
+            Console.WriteLine("\ndapper session\n");
             DisplayTable showResults = new();
-            showResults.ShowTable(codeSessions);
+            showResults.ShowTable(dapperSession);
 
-            return codeSessions;
+            return dapperSession;
         }
 
         // connect to an SQLite database, execute a query, create a table from Spectre Console, display table from Spectre Console:
-        internal void PrintTable(SqliteConnection connection)
+        internal List<Sessions> PrintTodayTable(SqliteConnection connection)
         {
-            var displayTableCommand = connection.CreateCommand();
+            var sql = @"SELECT * FROM sessions WHERE date = @date;";
 
-            try
-            {
-                displayTableCommand.CommandText =
-                @"
-                    SELECT *
-                    FROM sessions;
-                ";
+            // Use the Query method to execute the query and return a list of objects    
+            List<Sessions> coding = connection.Query<Sessions>(sql, new { date = "03-10-2024" }).ToList();
 
-                using (var reader = displayTableCommand.ExecuteReader())
-                {
-                    Console.WriteLine("\nCurrent Coding Sessions:");
-                    // Create a table
-                    var table = new Table();
-                    table.AddColumn("[red]ID[/]");
-                    table.AddColumn("[red]Date[/]");
-                    table.AddColumn("[red]Start[/]");
-                    table.AddColumn("[red]End[/]");
-                    table.AddColumn("[red]Duration[/]");
+            Console.WriteLine("\ndapper: print table\n");
+            DisplayTable showResults = new();
+            showResults.ShowTodayTable(coding);
 
-                    while (reader.Read())
-                    {
-                        table.AddRow($"{reader["id"]}", $"{reader["date"]}", $"{reader["startTime"]}", $"{reader["endTime"]}", $"{reader["duration"]}");
-                    }
-                    // table.Expand();
-                    // Display table from Spectre.Console
-                    AnsiConsole.Write(table);
-                }
-            }
-            catch (SqliteException message)
-            {
-                Console.WriteLine(message.Message);
-                Console.WriteLine(message.ErrorCode);
-                throw;
-            }
+            return coding;
         }
+
         internal void CreateRecord(SqliteConnection connection)
         {
             var currentDate = DateTime.Now;
@@ -264,21 +208,7 @@ namespace code_tracker
 
 
 
-        internal List<Sessions> GetResultsFromDB(SqliteConnection connection)
-        {
-            List<Sessions> dapperSession = new List<Sessions>();
 
-            var sql = @"SELECT * FROM sessions;";
-
-            dapperSession = connection.Query<Sessions>(sql).ToList();
-
-            Console.WriteLine("\n\ndapper session.\n\n");
-
-            DisplayTable showResults = new();
-            showResults.ShowTable(dapperSession);
-
-            return dapperSession;
-        }
 
     }
 }

@@ -53,9 +53,9 @@ namespace code_tracker
 
                     switch (menuSelection)
                     {
-                        case "1": // display sessions
+                        case "1": // display Today's sessions
                             SessionController showTable = new();
-                            showTable.PrintTable(connection);
+                            showTable.PrintTodayTable(connection);
 
                             break;
 
@@ -72,16 +72,15 @@ namespace code_tracker
                             break;
 
                         case "4": // 
-                            SessionController showList = new();
-                            showList.GetResultsFromDatabase(connection);
+
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
-                        case "5": // update session
+                        case "5": // DAPPER
 
                             SessionController showDapperList = new();
-                            showDapperList.GetResultsFromDB(connection);
+                            showDapperList.GetDataFromDB(connection);
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
