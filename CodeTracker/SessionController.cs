@@ -29,9 +29,8 @@ namespace code_tracker
             // Use the Query method to execute the query and return a list of objects    
             List<Sessions> coding = connection.Query<Sessions>(sql, new { date = "03-10-2024" }).ToList();
 
-            Console.WriteLine("\ndapper: print table\n");
             DisplayTable showResults = new();
-            showResults.ShowTodayTable(coding);
+            showResults.ShowTable(coding);
 
             return coding;
         }
@@ -107,12 +106,12 @@ namespace code_tracker
             List<Sessions> calculatedSessions = connection.Query<Sessions>(sqlCalculated, new { date = formattedDay }).ToList();
 
             DisplayTable showResults = new();
-            showResults.ShowSessionDurationTable(codingSessionDuration);
+            showResults.ShowTable(codingSessionDuration);
 
             Console.WriteLine("\ncalculatedSessions List:");
 
             DisplayTable showDuration = new();
-            showDuration.ShowSessionDurationTable(calculatedSessions);
+            showDuration.ShowTable(calculatedSessions);
 
             return codingSessionDuration;
         }
@@ -139,7 +138,7 @@ namespace code_tracker
 
             Console.WriteLine("\ndapper: insert table\n");
             DisplayTable showResults = new();
-            showResults.ShowTodayTable(insertedSessions);
+            showResults.ShowTable(insertedSessions);
 
             return insertedSessions;
         }
@@ -154,7 +153,7 @@ namespace code_tracker
             List<Sessions> coding = connection.Query<Sessions>(sql, new { date = userInputDate }).ToList();
 
             DisplayTable showResults = new();
-            showResults.ShowTodayTable(coding);
+            showResults.ShowTable(coding);
 
             return coding;
         }
@@ -211,7 +210,7 @@ namespace code_tracker
 
             // Console.WriteLine("\ndapper: session time table\n");
             DisplayTable showResults = new();
-            showResults.ShowSessionDurationTable(codingSessionDuration);
+            showResults.ShowTable(codingSessionDuration);
 
             return codingSessionDuration;
         }
