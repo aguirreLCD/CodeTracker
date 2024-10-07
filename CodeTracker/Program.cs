@@ -86,7 +86,7 @@ namespace code_tracker
 
                         case "7": // CalculateSessionDuration
                             SessionController sessionDuration = new();
-                            sessionDuration.CalculateSessionDuration(connection, "02-10-2024");
+                            sessionDuration.CalculateSessionDuration(connection, "07-10-2024");
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;

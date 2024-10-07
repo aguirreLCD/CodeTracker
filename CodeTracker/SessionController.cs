@@ -180,7 +180,7 @@ namespace code_tracker
 
             dataFromDB = connection.Query<Sessions>(sql, new { date = userInputDate }).ToList();
 
-            showResults.ShowTable(dataFromDB);
+            // showResults.ShowTable(dataFromDB);
 
             CalculateDuration(connection, userInputDate);
 
@@ -300,7 +300,6 @@ namespace code_tracker
 
             foreach (var sessiondata in sessions)
             {
-                // Console.WriteLine($"{sessiondata.date} {sessiondata.MaxStartTime} {sessiondata.MinStartTime} = {sessiondata.duration}");
                 dataFromDB.Add(
                                     new Sessions
                                     {
@@ -311,6 +310,7 @@ namespace code_tracker
                                     });
 
             }
+
             showResults.ShowTable(dataFromDB);
             return dataFromDB;
         }
@@ -340,41 +340,89 @@ namespace code_tracker
                 ) as sub
                 WHERE sub.RowNum = 1 ORDER BY id";
 
-            var firstRowByDate = connection.Query<Sessions>(sqlFirst).ToList();
+            List<Sessions> firstRowByDate = new List<Sessions>();
+            List<Sessions> lastRowByDate = new List<Sessions>();
 
-            foreach (var sessiondata in firstRowByDate)
-            {
-                firstLastDataByDay.Add(
-                                    new Sessions
-                                    {
-                                        id = sessiondata.id,
-                                        date = sessiondata.date.ToString(),
-                                        startTime = sessiondata.startTime.ToString(),
-                                    });
-            }
+            firstRowByDate = connection.Query<Sessions>(sqlFirst).ToList();
 
-            Console.WriteLine("first row");
+            // foreach (var sessiondata in firstRowByDate)
+            // {
+            //     firstLastDataByDay.Add(
+            //                         new Sessions
+            //                         {
+            //                             id = sessiondata.id,
+            //                             date = sessiondata.date.ToString(),
+            //                             startTime = sessiondata.startTime.ToString(),
+            //                         });
+            // }
+
+            // Console.WriteLine("first row by date");
+            // showResults.ShowTable(firstRowByDate);
+
+            // Console.WriteLine("firstLastDataByDay");
+            // showResults.ShowTable(firstLastDataByDay);
+
+            lastRowByDate = connection.Query<Sessions>(sqlLast).ToList();
+
+            // foreach (var sessiondata in lastRowByDate)
+            // {
+
+            //     firstRowByDate.Insert(6, sessiondata);
+            //     // firstLastDataByDay.Insert(6, sessiondata);
+
+
+            //     // firstRowByDate.Append(sessiondata);
+
+            //     firstLastDataByDay.Add(
+            //                          new Sessions
+            //                          {
+            //                              endTime = sessiondata.endTime.ToString(),
+            //                              duration = sessiondata.duration.ToString(),
+            //                          });
+
+            // }
+
+
+            // foreach (var sessiondataFirst in firstRowByDate)
+            // {
+            //     firstLastDataByDay.Add(
+            //                     new Sessions
+            //                     {
+            //                         id = sessiondataFirst.id,
+            //                         date = sessiondataFirst.date.ToString(),
+            //                         startTime = sessiondataFirst.startTime.ToString(),
+
+            //                     });
+
+            //     foreach (var sessiondataLast in lastRowByDate)
+            //     {
+            //         firstLastDataByDay.Add(
+            //                             new Sessions
+            //                             {
+            //                                 endTime = sessiondataLast.endTime.ToString(),
+            //                                 duration = sessiondataLast.duration.ToString(),
+            //                             });
+            //     }
+
+            // }
+
+            // Console.WriteLine("foreach foreach");
+            // showResults.ShowTable(firstLastDataByDay);
+
+            // Console.WriteLine("last row by date");
+            // showResults.ShowTable(lastRowByDate);
+
+            // Console.WriteLine("first row BY DATE");
+            // showResults.ShowTable(firstRowByDate);
+
+            // Console.WriteLine("firstLastDataByDay");
+            // showResults.ShowTable(firstLastDataByDay);
+
             showResults.ShowTable(firstRowByDate);
 
-            Console.WriteLine("firstLastDataByDay");
-            showResults.ShowTable(firstLastDataByDay);
-         
-            var lastRowByDate = connection.Query<Sessions>(sqlLast).ToList();
-            foreach (var sessiondata in lastRowByDate)
-            {
-                firstLastDataByDay.Add(
-                                    new Sessions
-                                    {
-                                        endTime = sessiondata.endTime.ToString(),
-                                        duration = sessiondata.duration.ToString(),
-                                    });
-
-            }
-            Console.WriteLine("last row");
             showResults.ShowTable(lastRowByDate);
 
-            Console.WriteLine("firstLastDataByDay");
-            showResults.ShowTable(firstLastDataByDay);
+
 
             var sqlSelect = @"SELECT * FROM sessions;";
             dataFromDB = connection.Query<Sessions>(sqlSelect).ToList();
