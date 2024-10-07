@@ -19,8 +19,6 @@ namespace code_tracker
                 table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
             }
 
-            
-
             AnsiConsole.Write(table);
         }
     }

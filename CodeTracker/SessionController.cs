@@ -15,20 +15,42 @@ namespace code_tracker
 
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
-            // var sql = @"SELECT * FROM sessions;";
+            // var queryAll = @"SELECT * FROM sessions;";
 
             // Query: Uses a common table expression (CTE) to partition the records by date 
             // and assigns a row number to each record within its partition.
             // The outer query selects only the first record (i.e., RowNum = 1) for each date.
 
-            var query = @"
+            var queryFirst = @"
                 SELECT * FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
                     FROM sessions
                 ) as sub
                 WHERE sub.RowNum = 1";
 
-            dataFromDB = connection.Query<Sessions>(query).ToList();
+            //Query: The SQL query selects the first record for each date. It uses a subquery to find the minimum Id for each date and groups by Date to ensure only one record per date is returned.
+
+            // var query = @"
+            //     SELECT * FROM sessions r
+            //     WHERE r.id = (
+            //         SELECT r2.id
+            //         FROM sessions r2
+            //         WHERE r2.date = r.date
+            //         ORDER BY r2.date ASC
+            //         LIMIT 1
+            //     )
+            //     GROUP BY r.date";
+
+            // var queryLast = @"
+            //     SELECT *
+            //     FROM sessions
+            //     WHERE id IN (
+            //         SELECT MAX(id)
+            //         FROM sessions
+            //         GROUP BY strftime('%dd-%mm-%YYYY', date)
+            //     )";
+
+            dataFromDB = connection.Query<Sessions>(queryFirst).ToList();
 
             showResults.ShowTable(dataFromDB);
 

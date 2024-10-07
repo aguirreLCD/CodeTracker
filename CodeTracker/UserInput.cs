@@ -80,20 +80,14 @@ namespace code_tracker
                         "6. To delete one session by ID, type 6",
                         "7. To calculate session duration by date, type 7",
                         "8. To update session, type 8",
-                        "9. To calculate , type 9",
-                        "c. To show a calendar, type c",
-                        "0. To exit the program, type 0",
-                    }));
-            // .AddChoices(new[]
-            // {
-            //     "1. To display all current table in database, type 1",
-            //     "2. To create new session, type 2",
-            //     "6. To delete one session by Id, type 6",
-            //     "3. To create new session, type 2",
-            //     "4. To create new session, type 2",
-            //     "5. To create new session, type 2",
-            //     "0. To exit the program, type 0",
-            // }));
+
+                    })
+            .AddChoices(new[]
+            {
+                "9. To calculate , type 9",
+                "c. To show a calendar, type c",
+                "0. To exit the program, type 0",
+            }));
 
             var choice = choices.Count == 1 ? choices[0] : null;
 
