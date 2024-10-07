@@ -340,10 +340,9 @@ namespace code_tracker
                 ) as sub
                 WHERE sub.RowNum = 1 ORDER BY id";
 
+            var firstRowByDate = connection.Query<Sessions>(sqlFirst).ToList();
 
-            dataFromDB = connection.Query<Sessions>(sqlFirst).ToList();
-
-            foreach (var sessiondata in dataFromDB)
+            foreach (var sessiondata in firstRowByDate)
             {
                 firstLastDataByDay.Add(
                                     new Sessions
@@ -351,46 +350,41 @@ namespace code_tracker
                                         id = sessiondata.id,
                                         date = sessiondata.date.ToString(),
                                         startTime = sessiondata.startTime.ToString(),
-                                        duration = sessiondata.duration.ToString(),
                                     });
-
             }
+
             Console.WriteLine("first row");
+            showResults.ShowTable(firstRowByDate);
 
+            Console.WriteLine("firstLastDataByDay");
             showResults.ShowTable(firstLastDataByDay);
-
-            dataFromDB = connection.Query<Sessions>(sqlLast).ToList();
-
-            foreach (var sessiondata in dataFromDB)
+         
+            var lastRowByDate = connection.Query<Sessions>(sqlLast).ToList();
+            foreach (var sessiondata in lastRowByDate)
             {
                 firstLastDataByDay.Add(
                                     new Sessions
                                     {
-                                        id = sessiondata.id,
-                                        date = sessiondata.date.ToString(),
-                                        startTime = sessiondata.startTime.ToString(),
                                         endTime = sessiondata.endTime.ToString(),
                                         duration = sessiondata.duration.ToString(),
                                     });
 
-
             }
             Console.WriteLine("last row");
+            showResults.ShowTable(lastRowByDate);
+
+            Console.WriteLine("firstLastDataByDay");
             showResults.ShowTable(firstLastDataByDay);
+
+            var sqlSelect = @"SELECT * FROM sessions;";
+            dataFromDB = connection.Query<Sessions>(sqlSelect).ToList();
 
             Console.WriteLine("dataFromDB");
             showResults.ShowTable(dataFromDB);
 
-            return dataFromDB;
-            // return firstLastDataByDay;
+            //    return dataFromDB;
+            return firstLastDataByDay;
 
         }
-
-
-
-
-
-
-
     }
 }
