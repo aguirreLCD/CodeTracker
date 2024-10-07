@@ -73,7 +73,7 @@ namespace code_tracker
 
                         case "5": // show DAPPER data
                             SessionController showDapperList = new();
-                            showDapperList.GetDataFromDB(connection);
+                            showDapperList.GetDuration(connection);
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;

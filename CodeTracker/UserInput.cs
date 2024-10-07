@@ -72,6 +72,7 @@ namespace code_tracker
                     .InstructionsText("[grey](Press [blue]<space>[/] to toggle a choice, [green]<enter>[/] to accept)[/]")
                     .AddChoiceGroup("Your main menu options are", new[]
                     {
+                        "0. To exit the program, type 0",
                         "1. To show Today's sessions, type 1",
                         "2. To create new session, type 2",
                         "3. To calculate today's session duration, type 3",
@@ -79,14 +80,12 @@ namespace code_tracker
                         "5. To Display->ShowTable from DAPPER, type 5",
                         "6. To delete one session by ID, type 6",
                         "7. To calculate session duration by date, type 7",
-                        "8. To update session, type 8",
-
                     })
             .AddChoices(new[]
             {
+                "8. To update session, type 8",
                 "9. To calculate , type 9",
                 "c. To show a calendar, type c",
-                "0. To exit the program, type 0",
             }));
 
             var choice = choices.Count == 1 ? choices[0] : null;

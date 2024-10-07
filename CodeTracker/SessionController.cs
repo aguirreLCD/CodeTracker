@@ -13,6 +13,8 @@ namespace code_tracker
         List<Sessions> dataFromDB = new List<Sessions>();
         string? durationTotal = "";
 
+        List<Sessions> firstLastDataByDay = new List<Sessions>();
+
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
             // var queryAll = @"SELECT * FROM sessions;";
@@ -21,12 +23,12 @@ namespace code_tracker
             // and assigns a row number to each record within its partition.
             // The outer query selects only the first record (i.e., RowNum = 1) for each date.
 
-            var queryFirst = @"
-                SELECT * FROM (
-                    SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
-                    FROM sessions
-                ) as sub
-                WHERE sub.RowNum = 1";
+            // var queryFirst = @"
+            //     SELECT * FROM (
+            //         SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
+            //         FROM sessions
+            //     ) as sub
+            //     WHERE sub.RowNum = 1 ORDER BY date";
 
             //Query: The SQL query selects the first record for each date. It uses a subquery to find the minimum Id for each date and groups by Date to ensure only one record per date is returned.
 
@@ -39,7 +41,7 @@ namespace code_tracker
             //         ORDER BY r2.date ASC
             //         LIMIT 1
             //     )
-            //     GROUP BY r.date";
+            //     GROUP BY r.id";
 
             // var queryLast = @"
             //     SELECT *
@@ -50,7 +52,17 @@ namespace code_tracker
             //         GROUP BY strftime('%dd-%mm-%YYYY', date)
             //     )";
 
-            dataFromDB = connection.Query<Sessions>(queryFirst).ToList();
+
+
+            var sqlLast = @"
+                SELECT * FROM (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id DESC) as RowNum
+                    FROM sessions
+                ) as sub
+                WHERE sub.RowNum = 1 ORDER BY id ";
+
+
+            dataFromDB = connection.Query<Sessions>(sqlLast).ToList();
 
             showResults.ShowTable(dataFromDB);
 
@@ -282,14 +294,14 @@ namespace code_tracker
 
             var sql = @"SELECT date, MAX(startTime) As MaxStartTime, MIN(startTime) As MinStartTime, duration FROM sessions WHERE date=@date;";
 
-            List<Sessions> codingSessionDuration = new List<Sessions>();
+            // List<Sessions> codingSessionDuration = new List<Sessions>();
 
             var sessions = connection.Query(sql, new { date = userInputDate });
 
             foreach (var sessiondata in sessions)
             {
                 // Console.WriteLine($"{sessiondata.date} {sessiondata.MaxStartTime} {sessiondata.MinStartTime} = {sessiondata.duration}");
-                codingSessionDuration.Add(
+                dataFromDB.Add(
                                     new Sessions
                                     {
                                         date = sessiondata.date.ToString(),
@@ -299,8 +311,79 @@ namespace code_tracker
                                     });
 
             }
-            showResults.ShowTable(codingSessionDuration);
-            return codingSessionDuration;
+            showResults.ShowTable(dataFromDB);
+            return dataFromDB;
+        }
+
+
+
+
+
+
+
+
+
+
+        internal List<Sessions> GetDuration(SqliteConnection connection)
+        {
+            var sqlFirst = @"
+                SELECT * FROM (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
+                    FROM sessions
+                ) as sub
+                WHERE sub.RowNum = 1 ORDER BY id";
+
+            var sqlLast = @"
+                SELECT * FROM (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id DESC) as RowNum
+                    FROM sessions
+                ) as sub
+                WHERE sub.RowNum = 1 ORDER BY id";
+
+
+            dataFromDB = connection.Query<Sessions>(sqlFirst).ToList();
+
+            foreach (var sessiondata in dataFromDB)
+            {
+                firstLastDataByDay.Add(
+                                    new Sessions
+                                    {
+                                        id = sessiondata.id,
+                                        date = sessiondata.date.ToString(),
+                                        startTime = sessiondata.startTime.ToString(),
+                                        duration = sessiondata.duration.ToString(),
+                                    });
+
+            }
+            Console.WriteLine("first row");
+
+            showResults.ShowTable(firstLastDataByDay);
+
+            dataFromDB = connection.Query<Sessions>(sqlLast).ToList();
+
+            foreach (var sessiondata in dataFromDB)
+            {
+                firstLastDataByDay.Add(
+                                    new Sessions
+                                    {
+                                        id = sessiondata.id,
+                                        date = sessiondata.date.ToString(),
+                                        startTime = sessiondata.startTime.ToString(),
+                                        endTime = sessiondata.endTime.ToString(),
+                                        duration = sessiondata.duration.ToString(),
+                                    });
+
+
+            }
+            Console.WriteLine("last row");
+            showResults.ShowTable(firstLastDataByDay);
+
+            Console.WriteLine("dataFromDB");
+            showResults.ShowTable(dataFromDB);
+
+            return dataFromDB;
+            // return firstLastDataByDay;
+
         }
 
 
