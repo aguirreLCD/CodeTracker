@@ -316,14 +316,6 @@ namespace code_tracker
         }
 
 
-
-
-
-
-
-
-
-
         internal List<Sessions> GetDuration(SqliteConnection connection)
         {
             var sqlFirst = @"
@@ -356,20 +348,16 @@ namespace code_tracker
             //                         });
             // }
 
-            // Console.WriteLine("first row by date");
             // showResults.ShowTable(firstRowByDate);
 
-            // Console.WriteLine("firstLastDataByDay");
             // showResults.ShowTable(firstLastDataByDay);
 
             lastRowByDate = connection.Query<Sessions>(sqlLast).ToList();
 
             // foreach (var sessiondata in lastRowByDate)
             // {
-
             //     firstRowByDate.Insert(6, sessiondata);
             //     // firstLastDataByDay.Insert(6, sessiondata);
-
 
             //     // firstRowByDate.Append(sessiondata);
 
@@ -381,7 +369,6 @@ namespace code_tracker
             //                          });
 
             // }
-
 
             // foreach (var sessiondataFirst in firstRowByDate)
             // {
@@ -406,33 +393,17 @@ namespace code_tracker
 
             // }
 
-            // Console.WriteLine("foreach foreach");
-            // showResults.ShowTable(firstLastDataByDay);
-
-            // Console.WriteLine("last row by date");
-            // showResults.ShowTable(lastRowByDate);
-
-            // Console.WriteLine("first row BY DATE");
-            // showResults.ShowTable(firstRowByDate);
-
-            // Console.WriteLine("firstLastDataByDay");
-            // showResults.ShowTable(firstLastDataByDay);
-
             showResults.ShowTable(firstRowByDate);
 
             showResults.ShowTable(lastRowByDate);
 
-
-
             var sqlSelect = @"SELECT * FROM sessions;";
             dataFromDB = connection.Query<Sessions>(sqlSelect).ToList();
 
-            Console.WriteLine("dataFromDB");
             showResults.ShowTable(dataFromDB);
 
             //    return dataFromDB;
             return firstLastDataByDay;
-
         }
     }
 }
