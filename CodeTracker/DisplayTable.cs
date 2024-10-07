@@ -7,6 +7,7 @@ namespace code_tracker
         internal void ShowTable(List<Sessions> dapperSession)
         {
             var table = new Table();
+
             table.AddColumn("[red]ID[/]");
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
@@ -17,6 +18,9 @@ namespace code_tracker
             {
                 table.AddRow($"{session.id}", $"{session.date}", $"{session.startTime}", $"{session.endTime}", $"{session.duration}");
             }
+
+            
+
             AnsiConsole.Write(table);
         }
     }

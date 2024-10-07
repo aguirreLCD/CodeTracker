@@ -81,6 +81,7 @@ namespace code_tracker
                         "7. To calculate session duration by date, type 7",
                         "8. To update session, type 8",
                         "9. To calculate , type 9",
+                        "c. To show a calendar, type c",
                         "0. To exit the program, type 0",
                     }));
             // .AddChoices(new[]

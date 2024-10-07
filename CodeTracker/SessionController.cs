@@ -15,9 +15,20 @@ namespace code_tracker
 
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
-            var sql = @"SELECT * FROM sessions;";
+            // var sql = @"SELECT * FROM sessions;";
 
-            dataFromDB = connection.Query<Sessions>(sql).ToList();
+            // Query: Uses a common table expression (CTE) to partition the records by date 
+            // and assigns a row number to each record within its partition.
+            // The outer query selects only the first record (i.e., RowNum = 1) for each date.
+
+            var query = @"
+                SELECT * FROM (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
+                    FROM sessions
+                ) as sub
+                WHERE sub.RowNum = 1";
+
+            dataFromDB = connection.Query<Sessions>(query).ToList();
 
             showResults.ShowTable(dataFromDB);
 
@@ -136,6 +147,8 @@ namespace code_tracker
             dataFromDB = connection.Query<Sessions>(sql, new { date = userInputDate }).ToList();
 
             showResults.ShowTable(dataFromDB);
+
+            CalculateDuration(connection, userInputDate);
 
             return dataFromDB;
         }
@@ -267,6 +280,12 @@ namespace code_tracker
             showResults.ShowTable(codingSessionDuration);
             return codingSessionDuration;
         }
+
+
+
+
+
+
 
     }
 }

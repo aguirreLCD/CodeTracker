@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Configuration;
+using Spectre.Console;
 
 namespace code_tracker
 {
@@ -65,7 +66,7 @@ namespace code_tracker
 
                         case "4": // 
                             SessionController showSessionsDay = new();
-                            showSessionsDay.ShowSessionsByDate(connection, "02-10-2024");
+                            showSessionsDay.ShowSessionsByDate(connection, "07-10-2024");
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
@@ -97,9 +98,20 @@ namespace code_tracker
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
-                        case "9": // Update Record
+                        case "9": //  calculate
                             SessionController calculate = new();
-                            calculate.CalculateDuration(connection, "02-10-2024");
+                            calculate.CalculateDuration(connection, "07-10-2024");
+
+                            Console.WriteLine("\n\rPress the Enter key to continue.");
+                            break;
+
+
+
+                        case "c": //  calendar
+                            var calendar = new Calendar(2024, 10);
+                            calendar.AddCalendarEvent(2024, 10, 7);
+                            calendar.HighlightStyle(Style.Parse("yellow bold"));
+                            AnsiConsole.Write(calendar);
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
