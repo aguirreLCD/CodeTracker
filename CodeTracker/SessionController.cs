@@ -13,8 +13,6 @@ namespace code_tracker
         List<Sessions> dataFromDB = new List<Sessions>();
         string? durationTotal = "";
 
-
-
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
             var sql = @"SELECT * FROM sessions;";
@@ -28,9 +26,13 @@ namespace code_tracker
 
         internal List<Sessions> PrintTodayTable(SqliteConnection connection)
         {
+            var currentDay = DateTime.Now;
+
+            string? formattedDay = currentDay.ToString("dd-MM-yyyy");
+
             var sql = @"SELECT * FROM sessions WHERE date = @date;";
 
-            dataFromDB = connection.Query<Sessions>(sql, new { date = "03-10-2024" }).ToList();
+            dataFromDB = connection.Query<Sessions>(sql, new { date = formattedDay }).ToList();
 
             showResults.ShowTable(dataFromDB);
 
@@ -237,11 +239,10 @@ namespace code_tracker
             return dataFromDB;
         }
 
-
+        // TODO: Calculate and show duration -> foreach day
         internal List<Sessions> CalculateDuration(SqliteConnection connection, string userInputDate)
         {
             // var currentDate = DateTime.Now;
-
             // string formattedDay = currentDate.ToString("dd-MM-yyyy");
 
             var sql = @"SELECT date, MAX(startTime) As MaxStartTime, MIN(startTime) As MinStartTime, duration FROM sessions WHERE date=@date;";
@@ -252,9 +253,7 @@ namespace code_tracker
 
             foreach (var sessiondata in sessions)
             {
-
-                Console.WriteLine($"{sessiondata.date} {sessiondata.MaxStartTime} {sessiondata.MinStartTime} = {sessiondata.duration}");
-
+                // Console.WriteLine($"{sessiondata.date} {sessiondata.MaxStartTime} {sessiondata.MinStartTime} = {sessiondata.duration}");
                 codingSessionDuration.Add(
                                     new Sessions
                                     {
@@ -265,11 +264,8 @@ namespace code_tracker
                                     });
 
             }
-
             showResults.ShowTable(codingSessionDuration);
-
             return codingSessionDuration;
-
         }
 
     }
