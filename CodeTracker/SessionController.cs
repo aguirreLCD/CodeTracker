@@ -53,7 +53,6 @@ namespace code_tracker
             //     )";
 
 
-
             var sqlLast = @"
                 SELECT * FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id DESC) as RowNum
