@@ -138,7 +138,14 @@ Microsoft.Data.Sqlite is a lightweight ADO NET provider for SQLite and you can i
 - TimeSpan;
 - Stopwatch;
 - Retrieve data from the database: <>List;
-- Use the Microsoft.Data.Sqlite library to query the database and populate a List<Session>.
+- Use the Microsoft.Data.Sqlite library to query the database and populate a List<Session>
+
+- T-SQL: MS Training:  
+  Learning Path:
+- Get Started Querying with Transact-SQL  
+  Module:
+- Introduction to Transact-SQL
+
 <!--
 
 git add .
