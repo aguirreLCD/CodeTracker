@@ -50,6 +50,9 @@ namespace code_tracker
                             SessionController showTable = new();
                             showTable.PrintTodayTable(connection);
 
+                            // SessionController showTable = new();
+                            // showTable.GetDataFromDB(connection);
+
                             break;
 
                         case "2"://  create session
@@ -89,6 +92,7 @@ namespace code_tracker
                             sessionDuration.CalculateSessionDuration(connection, "07-10-2024");
 
                             Console.WriteLine("\n\rPress the Enter key to continue.");
+
                             break;
 
                         case "8": // Update Record
@@ -109,7 +113,7 @@ namespace code_tracker
 
                         case "c": //  calendar
                             var calendar = new Calendar(2024, 10);
-                            calendar.AddCalendarEvent(2024, 10, 7);
+                            calendar.AddCalendarEvent(2024, 10, 8);
                             calendar.HighlightStyle(Style.Parse("yellow bold"));
                             AnsiConsole.Write(calendar);
 

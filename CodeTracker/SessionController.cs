@@ -9,6 +9,16 @@ namespace code_tracker
 {
     internal class SessionController
     {
+
+
+
+        // SELECT id, date, startTime FROM sessions WHERE date='08-10-2024' ORDER BY id DESC LIMIT 1;
+
+        // SELECT id, date, startTime FROM sessions WHERE date='08-10-2024' ORDER BY id LIMIT 1;
+
+        // SELECT id, date, MIN(startTime) As startTime, MAX(startTime) As endTime, MAX(startTime) - MIN(startTime) As duration FROM sessions WHERE date='08-10-2024';
+
+
         DisplayTable showResults = new();
         List<Sessions> dataFromDB = new List<Sessions>();
         string? durationTotal = "";
@@ -17,56 +27,25 @@ namespace code_tracker
 
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
         {
-            // var queryAll = @"SELECT * FROM sessions;";
-
-            // Query: Uses a common table expression (CTE) to partition the records by date 
-            // and assigns a row number to each record within its partition.
-            // The outer query selects only the first record (i.e., RowNum = 1) for each date.
-
-            // var queryFirst = @"
-            //     SELECT * FROM (
-            //         SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
-            //         FROM sessions
-            //     ) as sub
-            //     WHERE sub.RowNum = 1 ORDER BY date";
-
-            //Query: The SQL query selects the first record for each date. It uses a subquery to find the minimum Id for each date and groups by Date to ensure only one record per date is returned.
-
-            // var query = @"
-            //     SELECT * FROM sessions r
-            //     WHERE r.id = (
-            //         SELECT r2.id
-            //         FROM sessions r2
-            //         WHERE r2.date = r.date
-            //         ORDER BY r2.date ASC
-            //         LIMIT 1
-            //     )
-            //     GROUP BY r.id";
-
-            // var queryLast = @"
-            //     SELECT *
-            //     FROM sessions
-            //     WHERE id IN (
-            //         SELECT MAX(id)
-            //         FROM sessions
-            //         GROUP BY strftime('%dd-%mm-%YYYY', date)
-            //     )";
-
-
             var sqlLast = @"
-                SELECT * FROM (
+                SELECT id,
+                date,
+                startTime AS endTime,
+                duration
+                FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id DESC) as RowNum
                     FROM sessions
                 ) as sub
                 WHERE sub.RowNum = 1 ORDER BY id ";
 
-
             dataFromDB = connection.Query<Sessions>(sqlLast).ToList();
-
             showResults.ShowTable(dataFromDB);
-
             return dataFromDB;
         }
+
+
+
+
 
         internal List<Sessions> PrintTodayTable(SqliteConnection connection)
         {
@@ -74,7 +53,7 @@ namespace code_tracker
 
             string? formattedDay = currentDay.ToString("dd-MM-yyyy");
 
-            var sql = @"SELECT * FROM sessions WHERE date = @date;";
+            var sql = @"SELECT id, date, startTime FROM sessions WHERE date = @date;";
 
             dataFromDB = connection.Query<Sessions>(sql, new { date = formattedDay }).ToList();
 
@@ -136,16 +115,16 @@ namespace code_tracker
             }
             Console.WriteLine(durationTotal);
 
-            var sqlDuration = $"UPDATE sessions SET duration=@duration WHERE date=@date";
-            // 3. we will pass parameters values by providing the customer entity
-            var session = new Sessions() { date = formattedDay, duration = durationTotal };
-            var rowsAffected = connection.Execute(sqlDuration, session);
-            Console.WriteLine($"{rowsAffected} row(s) inserted.");
+            // var sqlDuration = $"UPDATE sessions SET duration=@duration WHERE date=@date";
+            // // 3. we will pass parameters values by providing the customer entity
+            // var session = new Sessions() { date = formattedDay, duration = durationTotal };
+            // var rowsAffected = connection.Execute(sqlDuration, session);
+            // Console.WriteLine($"{rowsAffected} row(s) inserted.");
+            showResults.ShowTable(codingSessionDuration);
 
             var sqlCalculated = @"SELECT * FROM sessions WHERE date=@date";
-            dataFromDB = connection.Query<Sessions>(sqlCalculated, new { date = formattedDay }).ToList();
 
-            showResults.ShowTable(codingSessionDuration);
+            dataFromDB = connection.Query<Sessions>(sqlCalculated, new { date = formattedDay }).ToList();
 
             showResults.ShowTable(dataFromDB);
 
@@ -159,14 +138,20 @@ namespace code_tracker
             string startHour = currentDate.ToString("HH:mm");
 
             // 2. We will create an `INSERT` sql statement
-            var sql = $"INSERT INTO sessions(date, startTime, endTime) VALUES(@date, @startTime, @endTime)";
+            var sql = $"INSERT INTO sessions(date, startTime) VALUES(@date, @startTime)";
 
             // 3. we will pass parameters values by providing the customer entity
-            var session = new Sessions() { date = formattedDay, startTime = startHour, endTime = startHour };
+            var session = new Sessions() { date = formattedDay, startTime = startHour };
             var rowsAffected = connection.Execute(sql, session);
-            Console.WriteLine($"{rowsAffected} row(s) inserted.");
+            Console.WriteLine($"\nNew session started: {formattedDay} at {startHour} inserted.");
 
-            dataFromDB = connection.Query<Sessions>("SELECT * FROM sessions").ToList();
+            Console.WriteLine($"\n{rowsAffected} row(s) inserted.");
+
+            var sqlInsert = "SELECT id, date, startTime FROM sessions;";
+
+            dataFromDB = connection.Query<Sessions>(sqlInsert).ToList();
+
+            Console.WriteLine("Sessions:");
 
             showResults.ShowTable(dataFromDB);
 
@@ -178,8 +163,6 @@ namespace code_tracker
             var sql = @"SELECT * FROM sessions WHERE date = @date;";
 
             dataFromDB = connection.Query<Sessions>(sql, new { date = userInputDate }).ToList();
-
-            // showResults.ShowTable(dataFromDB);
 
             CalculateDuration(connection, userInputDate);
 
@@ -260,6 +243,10 @@ namespace code_tracker
 
             var affectedRows = connection.Execute(sql, new { id });
 
+            // var sqlDeleteAll = @"DELETE FROM sessions;";
+
+            // var affectedRows = connection.Execute(sqlDeleteAll);
+
             Console.WriteLine($"Affected Rows: {affectedRows}");
 
         }
@@ -315,14 +302,14 @@ namespace code_tracker
         internal List<Sessions> GetDuration(SqliteConnection connection)
         {
             var sqlFirst = @"
-                SELECT id, date, startTime, startTime + duration AS endTime, duration FROM (
+                SELECT id, date, startTime FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
                     FROM sessions
                 ) as sub
                 WHERE sub.RowNum = 1 ORDER BY id";
 
             var sqlLast = @"
-                SELECT id, date, endtime, endTime - duration AS startTime, duration FROM (
+                SELECT id, date, endTime, duration FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id DESC) as RowNum
                     FROM sessions
                 ) as sub
@@ -348,9 +335,38 @@ namespace code_tracker
             // var sqlExpression = @"SELECT id, date, endTime - startTime AS duration FROM sessions;";
             // data = connection.Query<Sessions>(sqlExpression).ToList();
             // showResults.ShowTable(data);
-
+            // CalculateDuration(connection, date);
             //    return dataFromDB;
             return firstLastDataByDay;
         }
+
+
+
+        internal List<Sessions> InsertRecord(SqliteConnection connection)
+        {
+
+            // 2. We will create an `INSERT` sql statement
+            var sqlInsertRecord = $"INSERT INTO sessions(date, startTime, endTime) VALUES(@date, @startTime, @endTime)";
+
+            // 3. we will pass parameters values by providing the customer entity
+            var session = new Sessions() { date = "07-10-2024", startTime = "08:44", endTime = "17:55" };
+            var rowsAffected = connection.Execute(sqlInsertRecord, session);
+            // Console.WriteLine($"\nNew session started: {formattedDay} at {startHour} inserted.");
+
+            Console.WriteLine($"\n{rowsAffected} row(s) inserted.");
+
+            var sqlInsert = "SELECT id, date, startTime FROM sessions;";
+
+            dataFromDB = connection.Query<Sessions>(sqlInsert).ToList();
+
+            Console.WriteLine("Sessions:");
+
+            showResults.ShowTable(dataFromDB);
+
+            return dataFromDB;
+        }
+
+
+
     }
 }

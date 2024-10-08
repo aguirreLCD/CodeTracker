@@ -74,7 +74,7 @@ namespace code_tracker
                     {
                         "0. To exit the program, type 0",
                         "1. To show Today's sessions, type 1",
-                        "2. To create new session, type 2",
+                        "2. To start a new session, type 2",
                         "3. To calculate today's session duration, type 3",
                         "4. To show sessions by date, type 4",
                         "5. To Display->ShowTable from DAPPER, type 5",

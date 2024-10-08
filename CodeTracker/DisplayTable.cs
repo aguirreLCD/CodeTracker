@@ -8,6 +8,7 @@ namespace code_tracker
         {
             var table = new Table();
 
+
             table.AddColumn("[red]ID[/]");
             table.AddColumn("[red]Date[/]");
             table.AddColumn("[red]Start[/]");
