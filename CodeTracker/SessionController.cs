@@ -293,8 +293,6 @@ namespace code_tracker
 
             var sql = @"SELECT date, MAX(startTime) As MaxStartTime, MIN(startTime) As MinStartTime, duration FROM sessions WHERE date=@date;";
 
-            // List<Sessions> codingSessionDuration = new List<Sessions>();
-
             var sessions = connection.Query(sql, new { date = userInputDate });
 
             foreach (var sessiondata in sessions)
@@ -314,18 +312,17 @@ namespace code_tracker
             return dataFromDB;
         }
 
-
         internal List<Sessions> GetDuration(SqliteConnection connection)
         {
             var sqlFirst = @"
-                SELECT * FROM (
+                SELECT id, date, startTime, startTime + duration AS endTime, duration FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
                     FROM sessions
                 ) as sub
                 WHERE sub.RowNum = 1 ORDER BY id";
 
             var sqlLast = @"
-                SELECT * FROM (
+                SELECT id, date, endtime, endTime - duration AS startTime, duration FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id DESC) as RowNum
                     FROM sessions
                 ) as sub
@@ -333,64 +330,11 @@ namespace code_tracker
 
             List<Sessions> firstRowByDate = new List<Sessions>();
             List<Sessions> lastRowByDate = new List<Sessions>();
+            // List<Sessions> data = new List<Sessions>();
 
             firstRowByDate = connection.Query<Sessions>(sqlFirst).ToList();
 
-            // foreach (var sessiondata in firstRowByDate)
-            // {
-            //     firstLastDataByDay.Add(
-            //                         new Sessions
-            //                         {
-            //                             id = sessiondata.id,
-            //                             date = sessiondata.date.ToString(),
-            //                             startTime = sessiondata.startTime.ToString(),
-            //                         });
-            // }
-
-            // showResults.ShowTable(firstRowByDate);
-
-            // showResults.ShowTable(firstLastDataByDay);
-
             lastRowByDate = connection.Query<Sessions>(sqlLast).ToList();
-
-            // foreach (var sessiondata in lastRowByDate)
-            // {
-            //     firstRowByDate.Insert(6, sessiondata);
-            //     // firstLastDataByDay.Insert(6, sessiondata);
-
-            //     // firstRowByDate.Append(sessiondata);
-
-            //     firstLastDataByDay.Add(
-            //                          new Sessions
-            //                          {
-            //                              endTime = sessiondata.endTime.ToString(),
-            //                              duration = sessiondata.duration.ToString(),
-            //                          });
-
-            // }
-
-            // foreach (var sessiondataFirst in firstRowByDate)
-            // {
-            //     firstLastDataByDay.Add(
-            //                     new Sessions
-            //                     {
-            //                         id = sessiondataFirst.id,
-            //                         date = sessiondataFirst.date.ToString(),
-            //                         startTime = sessiondataFirst.startTime.ToString(),
-
-            //                     });
-
-            //     foreach (var sessiondataLast in lastRowByDate)
-            //     {
-            //         firstLastDataByDay.Add(
-            //                             new Sessions
-            //                             {
-            //                                 endTime = sessiondataLast.endTime.ToString(),
-            //                                 duration = sessiondataLast.duration.ToString(),
-            //                             });
-            //     }
-
-            // }
 
             showResults.ShowTable(firstRowByDate);
 
@@ -400,6 +344,10 @@ namespace code_tracker
             dataFromDB = connection.Query<Sessions>(sqlSelect).ToList();
 
             showResults.ShowTable(dataFromDB);
+
+            // var sqlExpression = @"SELECT id, date, endTime - startTime AS duration FROM sessions;";
+            // data = connection.Query<Sessions>(sqlExpression).ToList();
+            // showResults.ShowTable(data);
 
             //    return dataFromDB;
             return firstLastDataByDay;
