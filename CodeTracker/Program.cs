@@ -9,7 +9,6 @@ namespace code_tracker
         static void Main(string[] args)
         {
             Console.Clear();
-
             string? menuSelection = "";
 
             while (menuSelection != "0")
@@ -46,77 +45,83 @@ namespace code_tracker
 
                     switch (menuSelection)
                     {
+                        case "a": // display Today's sessions
+                            SessionController showFirtSession = new();
+                            showFirtSession.GetFirsSession(connection);
+                            break;
+
+                        case "b": // display Today's sessions
+                            SessionController showLastSession = new();
+                            showLastSession.GetLastSession(connection);
+                            break;
+
+                        case "d": // display Today's sessions
+                            SessionController showFirstLastSession = new();
+                            showFirstLastSession.GetFirstLastRecord(connection);
+                            break;
+
+                        case "e": // display All sessions
+                            SessionController showAllData = new();
+                            showAllData.GetDataFromDB(connection);
+                            break;
+
                         case "1": // display Today's sessions
                             SessionController showTable = new();
                             showTable.PrintTodayTable(connection);
-
                             // SessionController showTable = new();
                             // showTable.GetDataFromDB(connection);
-
                             break;
 
                         case "2"://  create session
                             SessionController insertSession = new();
                             insertSession.DapperInsert(connection);
-
                             break;
 
                         case "3": // calculate today's  session duration
                             SessionController calculateSession = new();
                             calculateSession.CalculateTodaySessionDuration(connection);
-
                             break;
 
                         case "4": // 
                             SessionController showSessionsDay = new();
                             showSessionsDay.ShowSessionsByDate(connection, "07-10-2024");
-
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
                         case "5": // show DAPPER data
                             SessionController showDapperList = new();
                             showDapperList.GetDuration(connection);
-
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
                         case "6": // delete session
                             SessionController deleteSession = new();
                             deleteSession.DeleteRecord(connection);
-
                             break;
 
                         case "7": // CalculateSessionDuration
                             SessionController sessionDuration = new();
                             sessionDuration.CalculateSessionDuration(connection, "07-10-2024");
-
                             Console.WriteLine("\n\rPress the Enter key to continue.");
-
                             break;
 
                         case "8": // Update Record
                             SessionController sessionUpdate = new();
                             sessionUpdate.UpdateRecord(connection);
-
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 
                         case "9": //  calculate
                             SessionController calculate = new();
                             calculate.CalculateDuration(connection, "07-10-2024");
-
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
-
-
 
                         case "c": //  calendar
                             var calendar = new Calendar(2024, 10);
                             calendar.AddCalendarEvent(2024, 10, 8);
                             calendar.HighlightStyle(Style.Parse("yellow bold"));
                             AnsiConsole.Write(calendar);
-
                             Console.WriteLine("\n\rPress the Enter key to continue.");
                             break;
 

@@ -73,6 +73,10 @@ namespace code_tracker
                     .AddChoiceGroup("Your main menu options are", new[]
                     {
                         "0. To exit the program, type 0",
+                        "a. To get first session, type a",
+                        "b. To get last session, type b",
+                        "d. To get first-last session, type d",
+                        "e. To get all sessions, type e",
                         "1. To show Today's sessions, type 1",
                         "2. To start a new session, type 2",
                         "3. To calculate today's session duration, type 3",

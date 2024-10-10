@@ -544,3 +544,11 @@ dotnet
 
 gitbranch.md
 tsql.md
+
+*.sqlite
+*.sql 
+*/.sql 
+
+
+/dp-080-Transact-SQL_files
+*/dp-080-Transact-SQL_files

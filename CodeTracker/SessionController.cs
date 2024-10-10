@@ -1,7 +1,6 @@
 
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
-
 using Dapper;
 using System.Data;
 
@@ -10,22 +9,108 @@ namespace code_tracker
     internal class SessionController
     {
 
-
-
-        // SELECT id, date, startTime FROM sessions WHERE date='08-10-2024' ORDER BY id DESC LIMIT 1;
-
-        // SELECT id, date, startTime FROM sessions WHERE date='08-10-2024' ORDER BY id LIMIT 1;
-
-        // SELECT id, date, MIN(startTime) As startTime, MAX(startTime) As endTime, MAX(startTime) - MIN(startTime) As duration FROM sessions WHERE date='08-10-2024';
-
-
         DisplayTable showResults = new();
         List<Sessions> dataFromDB = new List<Sessions>();
+        List<Sessions> firstLastDataByDay = new List<Sessions>();
         string? durationTotal = "";
 
-        List<Sessions> firstLastDataByDay = new List<Sessions>();
+
+        internal List<Sessions> GetFirsSession(SqliteConnection connection)
+        {
+            var sqlFirstSession = @"
+                                    SELECT 
+                                    id,
+                                    date,
+                                    startTime,
+                                    endTime
+                                    FROM sessions
+                                    WHERE date='08-10-2024'
+                                    ORDER BY id
+                                    LIMIT 1;
+                                ";
+
+            dataFromDB = connection.Query<Sessions>(sqlFirstSession).ToList();
+            showResults.ShowTable(dataFromDB);
+            return dataFromDB;
+        }
+
+
+        internal List<Sessions> Casting(SqliteConnection connection)
+        {
+            var sqlCast = @"
+                                    SELECT CAST(startTime AS integer) AS startTime,
+                                    CAST(endTime AS integer) AS endTime,
+                                    CAST(duration AS date) AS duration 
+                                    FROM sessions
+                                    WHERE date = '07-10-2024';
+                                ";
+            var sqlCastDate = @"
+                              SELECT CAST(startTime AS time) AS startTime,
+                              CAST(endTime AS time) AS endTime,
+                              CAST(endTime - startTime AS time) AS duration 
+                              FROM sessions WHERE date = '07-10-2024';
+                            ";
+
+            // SELECT CAST(startTime AS dateTime) AS startTime, CAST(endTime AS dateTime) AS endTime, CAST(endTime - startTime AS dateTime) AS duration FROM sessions WHERE date = '07-10-2024';
+            // SELECT CAST(startTime AS date) AS startTime, CAST(endTime AS date) AS endTime, CAST(endTime - startTime AS date) AS duration FROM sessions WHERE date = '07-10-2024';
+            // SELECT CAST(startTime AS time) AS startTime, CAST(endTime AS time) AS endTime, CAST(endTime - startTime AS time) AS duration FROM sessions WHERE date = '07-10-2024';
+            // SELECT CAST(startTime AS time(7)) AS startTime FROM sessions WHERE date = '07-10-2024';
+            // SELECT CAST(date AS dateTime2(7)) AS date, CAST(startTime AS dateTime2) AS startTime, CAST(endTime AS dateTime2) AS endTime, CAST(endTime - startTime AS dateTime2) AS duration FROM sessions WHERE date = '07-10-2024';
+
+            dataFromDB = connection.Query<Sessions>(sqlCast).ToList();
+            showResults.ShowTable(dataFromDB);
+            return dataFromDB;
+        }
+
+        internal List<Sessions> GetLastSession(SqliteConnection connection)
+        {
+            var sqlLastSession = @"
+                                    SELECT 
+                                    id,
+                                    date,
+                                    startTime,
+                                    endTime
+                                    FROM sessions
+                                    WHERE date='08-10-2024'
+                                    ORDER BY id
+                                    DESC
+                                    LIMIT 1;
+                                ";
+
+            dataFromDB = connection.Query<Sessions>(sqlLastSession).ToList();
+            showResults.ShowTable(dataFromDB);
+            return dataFromDB;
+        }
+
+        internal List<Sessions> GetFirstLastRecord(SqliteConnection connection)
+        {
+            var sqlFirstLast = @"
+                                  SELECT
+                                  date,
+                                  MIN(startTime) As startTime,
+                                  MAX(startTime) As endTime,
+                                  MAX(startTime) - MIN(startTime) As duration 
+                                  FROM sessions
+                                  WHERE date='08-10-2024';
+                                ";
+
+            dataFromDB = connection.Query<Sessions>(sqlFirstLast).ToList();
+            showResults.ShowTable(dataFromDB);
+            return dataFromDB;
+        }
 
         internal List<Sessions> GetDataFromDB(SqliteConnection connection)
+        {
+            var sqlSelectAll = @"SELECT *FROM sessions;";
+            dataFromDB = connection.Query<Sessions>(sqlSelectAll).ToList();
+            showResults.ShowTable(dataFromDB);
+            return dataFromDB;
+        }
+
+
+
+
+        internal List<Sessions> GetLastDataFromDB(SqliteConnection connection)
         {
             var sqlLast = @"
                 SELECT id,
@@ -42,10 +127,6 @@ namespace code_tracker
             showResults.ShowTable(dataFromDB);
             return dataFromDB;
         }
-
-
-
-
 
         internal List<Sessions> PrintTodayTable(SqliteConnection connection)
         {
@@ -292,21 +373,27 @@ namespace code_tracker
                                         endTime = sessiondata.MaxStartTime.ToString(),
                                         duration = sessiondata.duration.ToString(),
                                     });
-
             }
-
             showResults.ShowTable(dataFromDB);
             return dataFromDB;
         }
 
         internal List<Sessions> GetDuration(SqliteConnection connection)
         {
+            List<Sessions> firstRowByDate = new List<Sessions>();
+
             var sqlFirst = @"
                 SELECT id, date, startTime FROM (
                     SELECT *, ROW_NUMBER() OVER (PARTITION BY date ORDER BY id) as RowNum
                     FROM sessions
                 ) as sub
                 WHERE sub.RowNum = 1 ORDER BY id";
+
+            firstRowByDate = connection.Query<Sessions>(sqlFirst).ToList();
+            Console.WriteLine("\nFirstRowByDate:");
+            showResults.ShowTable(firstRowByDate);
+
+            List<Sessions> lastRowByDate = new List<Sessions>();
 
             var sqlLast = @"
                 SELECT id, date, endTime, duration FROM (
@@ -315,22 +402,15 @@ namespace code_tracker
                 ) as sub
                 WHERE sub.RowNum = 1 ORDER BY id";
 
-            List<Sessions> firstRowByDate = new List<Sessions>();
-            List<Sessions> lastRowByDate = new List<Sessions>();
-            // List<Sessions> data = new List<Sessions>();
-
-            firstRowByDate = connection.Query<Sessions>(sqlFirst).ToList();
-
             lastRowByDate = connection.Query<Sessions>(sqlLast).ToList();
-
-            showResults.ShowTable(firstRowByDate);
-
+            Console.WriteLine("\nLastRowByDate:");
             showResults.ShowTable(lastRowByDate);
 
             var sqlSelect = @"SELECT * FROM sessions;";
             dataFromDB = connection.Query<Sessions>(sqlSelect).ToList();
-
             showResults.ShowTable(dataFromDB);
+
+
 
             // var sqlExpression = @"SELECT id, date, endTime - startTime AS duration FROM sessions;";
             // data = connection.Query<Sessions>(sqlExpression).ToList();
@@ -340,11 +420,8 @@ namespace code_tracker
             return firstLastDataByDay;
         }
 
-
-
         internal List<Sessions> InsertRecord(SqliteConnection connection)
         {
-
             // 2. We will create an `INSERT` sql statement
             var sqlInsertRecord = $"INSERT INTO sessions(date, startTime, endTime) VALUES(@date, @startTime, @endTime)";
 
@@ -365,8 +442,5 @@ namespace code_tracker
 
             return dataFromDB;
         }
-
-
-
     }
 }
